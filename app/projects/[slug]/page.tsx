@@ -25,7 +25,6 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     openGraph: {
       title: `${project.title} - UptownProperties.in`,
       description: project.description,
-      url: `https://uptownproperties.in/projects/${project.slug}`,
       images: [
         {
           url: project.image,

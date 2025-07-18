@@ -79,7 +79,7 @@ const ProjectsList = () => {
             
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{project.title}</h3>
-              <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
+              <p className="text-gray-600 mb-4">{project.description.length > 100 ? project.description.substring(0, 100) + '...' : project.description}</p>
               
               <div className="space-y-2 mb-4">
                 <div className="flex items-center text-sm text-gray-500">
