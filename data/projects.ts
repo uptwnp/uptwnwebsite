@@ -30,7 +30,7 @@ export const projects: Project[] = [
     type: 'Plots',
     status: 'Pre-Launch',
     units: 'Varied plot sizes',
-    price: 0, // On Request
+    price: 200, // On Request
     area: 'Wide expanse of land',
     slug: 'trident-plots-panipat',
     features: [
