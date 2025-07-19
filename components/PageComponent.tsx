@@ -16,14 +16,12 @@ const PageComponent = ({ page }: PageComponentProps) => {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {page.title}
           </h1>
-          <p className="text-gray-600">
-            Last updated: {page.lastUpdated}
-          </p>
+          <p className="text-gray-600">Last updated: {page.lastUpdated}</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-8 md:p-12">
-          <div 
-            className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+          <div
+            className="prose prose-lg prose-blue max-w-none"
             dangerouslySetInnerHTML={{ __html: page.content }}
           />
         </div>
