@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'UptownProperties.in - Premium Real Estate in Panipat',
     description: 'Leading real estate company in Panipat offering premium properties, residential projects, and commercial spaces.',
+    url: 'https://uptownproperties.in',
     siteName: 'UptownProperties.in',
     locale: 'en_IN',
     type: 'website',
@@ -54,6 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="canonical" href="https://uptownproperties.in" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </head>

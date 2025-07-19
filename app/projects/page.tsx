@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Our Projects - UptownProperties.in',
     description: 'Explore our premium real estate projects in Panipat. From residential complexes to commercial spaces, discover your perfect property investment.',
+    url: 'https://uptownproperties.in/projects',
   },
 };
 

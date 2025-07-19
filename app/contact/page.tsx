@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact Us - UptownProperties.in',
     description: 'Get in touch with UptownProperties.in for property buying, selling, partnership opportunities, and referral programs.',
+    url: 'https://uptownproperties.in/contact',
   },
 };
 
