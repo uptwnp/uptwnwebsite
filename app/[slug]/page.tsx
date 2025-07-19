@@ -24,7 +24,6 @@ export async function generateMetadata({ params }: StaticPageProps): Promise<Met
     openGraph: {
       title: `${page.title} - UptownProperties.in`,
       description: page.description,
-      url: `https://uptownproperties.in/${page.slug}`,
     },
   };
 }
