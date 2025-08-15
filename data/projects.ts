@@ -472,4 +472,37 @@ export const projects: Project[] = [
       "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
     ],
   },
+  {
+    id: 13,
+    title: "Nysa Residential Panipat",
+    description:
+      "Nysa Panipat is in 18 Acre Gated Township Situated at Shimla Maulana Road Aligned with Eldeco Paradiso",
+    image:
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+    location: "Baberpur mandi, Panipat",
+    type: "Residential/Plots",
+    status: "On Sale",
+    units: "10 Left",
+    price: 100,
+    area: "18 Acres",
+    slug: "nysa-panipat-residential",
+    features: [
+      "Nysa brand",
+      "18-acre land parcel",
+      "Plotted residential development",
+      "Accessible from National Highway",
+      "Close to social infrastructure",
+      "Prime Location Afforadable Prices",
+    ],
+    amenities: [], // Amenities not yet detailed for this upcoming project
+    specifications: {
+      "Land Area": "18 Acres",
+      "Revenue Potential": "100+ Cr",
+      Approval: "Registered",
+      Location: "Shimla Maulana Road, Panipat",
+    },
+    gallery: [
+      "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ],
+  },
 ];
