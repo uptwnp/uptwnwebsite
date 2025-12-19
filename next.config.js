@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  output: "export",
   trailingSlash: true,
   eslint: {
     ignoreDuringBuilds: true,
@@ -8,8 +8,23 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: { 
-    unoptimized: true 
+  images: {
+    unoptimized: true,
+  },
+};
+
+module.exports = nextConfig;
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/visitingcard",
+        destination: "https://hello.uptownproperties.in/",
+        permanent: true,
+      },
+    ];
   },
 };
 

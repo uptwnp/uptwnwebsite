@@ -1,8 +1,2 @@
 [build]
   publish = "out"
-
-[[redirects]]
-  from = "/visitingcard"
-  to = "https://hello.uptownproperties.in/"
-  status = 301
-  force = true
