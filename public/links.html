@@ -833,7 +833,7 @@
                         <a href="https://maps.app.goo.gl/3AJGkvSnig9nAKDJ8" class="sub-link" target="_blank">
                             <div class="sub-link-icon location"><i class="fas fa-map-pin"></i></div>
                             <div class="sub-link-content">
-                                <div class="sub-link-title">SCO 83, Sector Panipat</div>
+                                <div class="sub-link-title">SCO 83, Sector 15, Panipat</div>
                             </div>
                             <i class="fas fa-external-link-alt sub-link-arrow"></i>
                         </a>
@@ -974,7 +974,7 @@
             <button class="modal-close" onclick="closeContactModal()">&times;</button>
             <div class="modal-header">
                 <div class="modal-title" id="modalTitle">Choose Contact</div>
-                <div class="modal-subtitle">Check Downloads</div>
+                <div class="modal-subtitle" id="modalSubtitle">Select who you'd like to connect with</div>
             </div>
             <div id="modalOptions">
                 <!-- Options will be inserted here by JavaScript -->
@@ -998,8 +998,8 @@
         // Contact data
         const contacts = [
             { name: 'Uptown Property Panipat', phone: '+919518091945' },
-            { name: 'Yogesh Bhardwaj - Uptown Property', phone: '+919138331357' },
-            { name: 'Mohit Bhardwaj - Uptown Property', phone: '+919971085800' }
+            { name: 'Yogesh Bhardwaj', phone: '+919138331357' },
+            { name: 'Mohit Bhardwaj', phone: '+919971085800' }
         ];
 
         // Open Contact Modal
@@ -1007,10 +1007,13 @@
             event.preventDefault();
             const modal = document.getElementById('contactModal');
             const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
             const modalOptions = document.getElementById('modalOptions');
 
             if (type === 'whatsapp') {
                 modalTitle.textContent = 'WhatsApp';
+                modalSubtitle.textContent = 'Select who you\'d like to connect with';
+                modalSubtitle.style.display = 'block';
                 modalOptions.innerHTML = contacts.map((contact, index) => `
                     <a href="https://wa.me/${contact.phone.replace(/\+/g, '')}" 
                        class="contact-option" 
@@ -1027,6 +1030,8 @@
                 `).join('');
             } else if (type === 'call') {
                 modalTitle.textContent = 'Call';
+                modalSubtitle.textContent = 'Select who you\'d like to connect with';
+                modalSubtitle.style.display = 'block';
                 modalOptions.innerHTML = contacts.map((contact, index) => `
                     <a href="tel:${contact.phone}" 
                        class="contact-option"
@@ -1087,9 +1092,11 @@ END:VCARD
             setTimeout(() => {
                 const modal = document.getElementById('contactModal');
                 const modalTitle = document.getElementById('modalTitle');
+                const modalSubtitle = document.getElementById('modalSubtitle');
                 const modalOptions = document.getElementById('modalOptions');
 
                 modalTitle.innerHTML = '✅ Contact File Downloaded!';
+                modalSubtitle.style.display = 'none';
                 modalOptions.innerHTML = `
                     <div style="padding: 10px 0;">
                         <div style="font-size: 1rem; font-weight: 600; color: #1a1a1a; margin-bottom: 16px;">
@@ -1146,9 +1153,11 @@ END:VCARD
 
             const modal = document.getElementById('contactModal');
             const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
             const modalOptions = document.getElementById('modalOptions');
 
             modalTitle.innerHTML = '📢 Join WhatsApp Broadcast';
+            modalSubtitle.style.display = 'none';
             modalOptions.innerHTML = `
                 <div style="padding: 10px 0;">
                     <div style="font-size: 0.95rem; color: #6c757d; margin-bottom: 20px; text-align: center;">
@@ -1198,7 +1207,7 @@ END:VCARD
                         
                         <div style="display: flex; align-items: start; gap: 12px;">
                             <div style="width: 28px; height: 28px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; flex-shrink: 0;">✓</div>
-                            <div style="flex: 1; padding-top: 4px; color: #059669; font-weight: 600;">You're all set! Get latest property updates</div>
+                            <div style="flex: 1; padding-top: 4px; color: #059669; font-weight: 600;">You're all set! Get the latest property updates</div>
                         </div>
                     </div>
 
@@ -1262,6 +1271,9 @@ END:VCARD
             cards.forEach((card, index) => {
                 card.style.animationDelay = `${index * 0.05}s`;
             });
+
+            // Start auto-scroll animation
+            startAutoScroll();
         });
     </script>
 </body>
