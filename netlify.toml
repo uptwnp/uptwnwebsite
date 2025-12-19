@@ -1,9 +1,17 @@
 [build]
-  publish = "out"
-  command = "npm run build"
+  publish = "dist"
 
-[build.environment]
-  NODE_VERSION = "18"
+[[redirects]]
+  from = "/links.html"
+  to = "/links.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/visitingcard"
+  to = "https://hello.uptownproperties.in/"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/*"
