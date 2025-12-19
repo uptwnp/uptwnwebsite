@@ -1,5 +1,5 @@
 [build]
-  publish = "dist"
+  publish = "out"
 
 [[redirects]]
   from = "/links.html"
