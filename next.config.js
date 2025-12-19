@@ -14,18 +14,3 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: "/visitingcard",
-        destination: "https://hello.uptownproperties.in/",
-        permanent: true,
-      },
-    ];
-  },
-};
-
-module.exports = nextConfig;
