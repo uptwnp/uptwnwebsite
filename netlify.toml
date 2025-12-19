@@ -2,12 +2,6 @@
   publish = "out"
 
 [[redirects]]
-  from = "/links.html"
-  to = "/links.html"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/visitingcard"
   to = "https://hello.uptownproperties.in/"
   status = 301
@@ -17,4 +11,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
