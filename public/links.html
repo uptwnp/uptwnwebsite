@@ -146,7 +146,7 @@
 
         /* Content Section */
         .content {
-            padding: 0 20px 40px;
+            padding: 0 10px 40px;
         }
 
         /* Contact Actions */
@@ -886,7 +886,7 @@
                             <i class="fab fa-whatsapp"></i>
                         </div>
                         <div class="link-text">
-                            <div class="link-title">Get Latest Updates on WhatsApp</div>
+                            <div class="link-title">Get Latest Updates</div>
                             <div class="link-subtitle">Join our WhatsApp broadcast</div>
                         </div>
                         <i class="fas fa-chevron-right link-arrow"></i>
@@ -1268,74 +1268,75 @@ END:VCARD
             const modalSubtitle = document.getElementById('modalSubtitle');
             const modalOptions = document.getElementById('modalOptions');
 
-            modalTitle.innerHTML = '📢 Join WhatsApp Broadcast';
-            modalSubtitle.style.display = 'none';
+            modalTitle.innerHTML = 'Join Broadcast';
+            modalSubtitle.innerHTML = 'Get Latest Property Updates';
+            modalSubtitle.style.display = 'block';
             modalOptions.innerHTML = `
                 <div style="padding: 10px 0;">
-                    <div style="font-size: 0.95rem; color: #6c757d; margin-bottom: 20px; text-align: center;">
-                        For Traders, Investors and Real Estate Enthusiasts
-                    </div>
-                    
-                    <div style="background: #fff3cd; border-radius: 12px; padding: 16px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
-                        <div style="display: flex; align-items: start; gap: 12px;">
-                            <i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 1.2rem; margin-top: 2px;"></i>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600; color: #856404; margin-bottom: 4px;">Important!</div>
-                                <div style="color: #856404; font-size: 0.9rem;">You must save our contact first to receive broadcast messages</div>
-                            </div>
+                    <!-- Broadcast Profile Section -->
+                    <div style="text-align: center; padding: 20px 0; margin-bottom: 24px;">
+                        <div style="width: 80px; height: 80px; margin: 0 auto 16px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);">
+                            <i class="fas fa-bullhorn" style="font-size: 2rem; color: white;"></i>
+                        </div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">
+                            Uptown Properties Broadcast
+                        </div>
+                        <div style="font-size: 0.9rem; color: #6c757d;">
+                            For Traders, Investors & Real Estate Enthusiasts
                         </div>
                     </div>
 
-                    <div style="font-size: 1rem; font-weight: 600; color: #1a1a1a; margin-bottom: 16px;">
-                        📝 Steps to Join:
-                    </div>
-                    
-                    <div style="background: #f8f9fa; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-                        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 16px;">
-                            <div style="width: 28px; height: 28px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; flex-shrink: 0;">1</div>
+                    <!-- Join Broadcast Button -->
+                    <a href="https://wa.me/919518091945?text=Hi%2C%20I%20want%20to%20join%20the%20WhatsApp%20broadcast%20for%20property%20updates" 
+                       target="_blank"
+                       onclick="closeContactModal()"
+                       style="width: 100%; padding: 16px; background: #25D366; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: all 0.2s ease;">
+                        <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i>
+                        <span>Join Broadcast</span>
+                    </a>
+
+                    <!-- Important Notice -->
+                    <div style="background: #fff3cd; border-radius: 12px; padding: 16px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
+                        <div style="display: flex; align-items: start; gap: 12px;">
+                            <i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 1.2rem; margin-top: 2px; flex-shrink: 0;"></i>
                             <div style="flex: 1;">
-                                <div style="font-weight: 600; color: #1a1a1a; margin-bottom: 6px;">Save Our Contact</div>
-                                <button onclick="saveContact(event); event.stopPropagation();" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                                <div style="font-weight: 600; color: #856404; margin-bottom: 6px; font-size: 0.95rem;">Important!</div>
+                                <div style="color: #856404; font-size: 0.88rem; line-height: 1.5;">Must save our contact to receive WhatsApp messages</div>
+                                <button onclick="saveContact(event); event.stopPropagation();" style="margin-top: 12px; padding: 10px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px;">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Save Contact Now</span>
                                 </button>
                             </div>
                         </div>
-                        
-                        <div style="display: flex; align-items: start; gap: 12px; margin-bottom: 16px;">
-                            <div style="width: 28px; height: 28px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; flex-shrink: 0;">2</div>
-                            <div style="flex: 1; padding-top: 4px;">
-                                <div style="font-weight: 600; color: #1a1a1a; margin-bottom: 4px;">Send "Hi" on WhatsApp</div>
-                                <div style="color: #6c757d; font-size: 0.85rem; margin-bottom: 8px;">Click below to message us and get added to broadcast</div>
-                                <a href="https://wa.me/919518091945?text=Hi%2C%20I%20want%20to%20join%20the%20WhatsApp%20broadcast%20for%20property%20updates" 
-                                   target="_blank"
-                                   onclick="closeContactModal()"
-                                   style="padding: 10px 20px; background: #25D366; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                                    <i class="fab fa-whatsapp"></i>
-                                    <span>Say Hi & Join Broadcast</span>
-                                </a>
+                    </div>
+
+                    <!-- What You Will Get Container -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 16px; color: white;">
+                        <div style="font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-gift"></i>
+                            <span>What You'll Get</span>
+                        </div>
+                        <div style="font-size: 0.9rem; line-height: 1.8;">
+                            <div style="display: flex; align-items: start; gap: 10px; margin-bottom: 8px;">
+                                <i class="fas fa-check-circle" style="margin-top: 4px; flex-shrink: 0;"></i>
+                                <span>Latest property listings in Panipat</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 10px; margin-bottom: 8px;">
+                                <i class="fas fa-check-circle" style="margin-top: 4px; flex-shrink: 0;"></i>
+                                <span>Exclusive deals & offers</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 10px; margin-bottom: 8px;">
+                                <i class="fas fa-check-circle" style="margin-top: 4px; flex-shrink: 0;"></i>
+                                <span>Market updates & insights</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="margin-top: 4px; flex-shrink: 0;"></i>
+                                <span>Investment opportunities</span>
                             </div>
                         </div>
-                        
-                        <div style="display: flex; align-items: start; gap: 12px;">
-                            <div style="width: 28px; height: 28px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; flex-shrink: 0;">✓</div>
-                            <div style="flex: 1; padding-top: 4px; color: #059669; font-weight: 600;">You're all set! Get the latest property updates</div>
-                        </div>
                     </div>
 
-                    <div style="background: #e7f3ff; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
-                        <div style="font-size: 0.9rem; font-weight: 600; color: #0c5da5; margin-bottom: 8px;">
-                            📩 What you'll receive:
-                        </div>
-                        <div style="font-size: 0.85rem; color: #0c5da5; line-height: 1.6;">
-                            • Latest property listings<br>
-                            • Exclusive deals & offers<br>
-                            • Market updates & insights<br>
-                            • Investment opportunities
-                        </div>
-                    </div>
-
-                    <button onclick="closeContactModal()" style="width: 100%; padding: 14px; background: #6c757d; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
+                    <button onclick="closeContactModal()" style="width: 100%; padding: 14px; background: #e9ecef; color: #495057; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">
                         Close
                     </button>
                 </div>
