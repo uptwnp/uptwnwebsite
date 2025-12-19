@@ -126,13 +126,22 @@
             white-space: nowrap;
             flex-shrink: 0;
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .property-tag:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.4);
+        @media (hover: hover) and (pointer: fine) {
+            .property-tag:hover {
+                background: rgba(255, 255, 255, 0.3);
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        .property-tag:active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.95);
         }
 
         /* Content Section */
@@ -157,10 +166,12 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             border: none;
             cursor: pointer;
             color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .contact-btn.whatsapp {
@@ -172,6 +183,11 @@
             transform: translateY(-1px);
         }
 
+        .contact-btn.whatsapp:active {
+            background: #1ea750;
+            transform: translateY(0) scale(0.98);
+        }
+
         .contact-btn.call {
             background: #3b82f6;
         }
@@ -179,6 +195,11 @@
         .contact-btn.call:hover {
             background: #2563eb;
             transform: translateY(-1px);
+        }
+
+        .contact-btn.call:active {
+            background: #1d4ed8;
+            transform: translateY(0) scale(0.98);
         }
 
         .contact-btn i {
@@ -276,11 +297,21 @@
             cursor: pointer;
             padding: 4px;
             line-height: 1;
-            transition: color 0.2s ease;
+            transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .modal-close:hover {
-            color: #1a1a1a;
+        @media (hover: hover) and (pointer: fine) {
+            .modal-close:hover {
+                color: #1a1a1a;
+                transform: scale(1.1);
+            }
+        }
+
+        .modal-close:active {
+            color: #000000;
+            transform: scale(0.95);
         }
 
         .contact-option {
@@ -292,14 +323,23 @@
             background: #f8f9fa;
             margin-bottom: 10px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             text-decoration: none;
             color: inherit;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .contact-option:hover {
-            background: #e9ecef;
-            transform: translateX(4px);
+        @media (hover: hover) and (pointer: fine) {
+            .contact-option:hover {
+                background: #e9ecef;
+                transform: translateX(4px);
+            }
+        }
+
+        .contact-option:active {
+            background: #dee2e6;
+            transform: scale(0.98);
         }
 
         .contact-option-icon {
@@ -350,13 +390,15 @@
             border-radius: 14px;
             margin-bottom: 10px;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .link-card:hover {
-            border-color: #cbd5e0;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            transform: translateY(-1px);
+        @media (hover: hover) and (pointer: fine) {
+            .link-card:hover {
+                border-color: #cbd5e0;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+                transform: translateY(-1px);
+            }
         }
 
         .link-main {
@@ -367,11 +409,20 @@
             text-decoration: none;
             color: #1a1a1a;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .link-main:hover {
-            background: #f8f9fa;
+        @media (hover: hover) and (pointer: fine) {
+            .link-main:hover {
+                background: #f8f9fa;
+            }
+        }
+
+        .link-main:active {
+            background: #e9ecef;
+            transform: scale(0.99);
         }
 
         .link-icon {
@@ -468,9 +519,11 @@
             transition: all 0.3s ease;
         }
 
-        .link-main:hover .link-arrow {
-            color: #94a3b8;
-            transform: translateX(3px);
+        @media (hover: hover) and (pointer: fine) {
+            .link-main:hover .link-arrow {
+                color: #94a3b8;
+                transform: translateX(3px);
+            }
         }
 
         .expand-arrow {
@@ -502,17 +555,26 @@
             padding: 16px 20px;
             text-decoration: none;
             color: #1a1a1a;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             border-bottom: 1px solid #e9ecef;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .sub-link:last-child {
             border-bottom: none;
         }
 
-        .sub-link:hover {
-            background: #ffffff;
-            padding-left: 25px;
+        @media (hover: hover) and (pointer: fine) {
+            .sub-link:hover {
+                background: #ffffff;
+                padding-left: 25px;
+            }
+        }
+
+        .sub-link:active {
+            background: #e9ecef;
+            transform: scale(0.98);
         }
 
         .sub-link-icon {
@@ -614,6 +676,17 @@
             font-size: 0.8rem;
             color: #adb5bd;
             font-weight: 500;
+        }
+
+        /* Global Button Styles */
+        button {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+
+        button:active {
+            transform: scale(0.97);
         }
 
         /* Animations */
