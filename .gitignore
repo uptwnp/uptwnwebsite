@@ -43,3 +43,8 @@ next-env.d.ts
 # wrangler
 .wrangler
 
+# seed scripts
+seed-*.mjs
+seed-*.js
+
+

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ProjectsClient from '@/components/ProjectsClient';
+import { getProjects } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Real Estate Projects & Townships in Panipat | Uptown Property',
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProjectsListingPage() {
-  return <ProjectsClient />;
+export default async function ProjectsListingPage() {
+  const projects = await getProjects();
+  return <ProjectsClient projects={projects} />;
 }

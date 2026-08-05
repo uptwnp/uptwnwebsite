@@ -328,8 +328,8 @@ export const PROJECTS: Project[] = [
       'Rate': '₹50,000 / sq yd',
     },
     mapUrl: 'https://maps.google.com/?q=29.518339,76.978022',
-    brochureUrl: 'https://pub-9e00030e294c40efa96642db5ba7f437.r2.dev/projects-files/nysa-payment-plan.jpg',
-    layoutUrl: 'https://pub-9e00030e294c40efa96642db5ba7f437.r2.dev/layouts/nysa-layout.jpg',
+    brochureUrl: 'https://pub-9e00030e294c40efa96642db5ba7f437.r2.dev/projects-files/nysa-brochure.pdf',
+    layoutUrl: 'https://pub-9e00030e294c40efa96642db5ba7f437.r2.dev/layouts/nysa-layout.pdf',
   },
   {
     slug: 'godrej-panipat',

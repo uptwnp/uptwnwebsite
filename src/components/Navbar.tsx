@@ -6,6 +6,7 @@ import { useTheme } from './ThemeProvider';
 
 const NAV_LINKS = [
   { href: '/projects', label: 'Projects' },
+  { href: '/layouts', label: 'Layouts' },
   { href: 'https://mylistings.in/', label: 'Resale Properties', external: true },
   { href: '/contact', label: 'Contact' },
 ];

@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next';
-import { PROJECTS } from '@/data/projects';
+import { getProjectSlugs, getLayoutAreaParams } from '@/lib/supabase';
 
 const BASE_URL = 'https://uptownproperty.in';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date().toISOString();
 
   // Core static pages
@@ -19,6 +19,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/layouts`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.85,
     },
     {
       url: `${BASE_URL}/contact`,
@@ -46,13 +52,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Dynamic project pages for all 13 projects
-  const projectPages: MetadataRoute.Sitemap = PROJECTS.map(project => ({
-    url: `${BASE_URL}/projects/${project.slug}`,
+  // Dynamic project pages — fetched from DB
+  const slugs = await getProjectSlugs();
+  const projectPages: MetadataRoute.Sitemap = slugs.map(slug => ({
+    url: `${BASE_URL}/projects/${slug}`,
     lastModified: currentDate,
-    changeFrequency: 'weekly',
+    changeFrequency: 'weekly' as const,
     priority: 0.85,
   }));
 
-  return [...staticPages, ...projectPages];
+  // Dynamic layout area pages — fetched from DB
+  const layoutParams = await getLayoutAreaParams();
+  const layoutAreaPages: MetadataRoute.Sitemap = layoutParams.map(({ city, area }) => ({
+    url: `${BASE_URL}/layouts/${city}/${area}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...projectPages, ...layoutAreaPages];
 }

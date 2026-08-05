@@ -2,19 +2,19 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { PROJECTS } from '@/data/projects';
+import type { Project } from '@/data/projects';
 import ProjectCard from '@/components/ProjectCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const TYPE_TABS = ['All', 'Plots', 'Builder Floors', 'Flats', 'Industrial'];
 
-export default function ProjectsClient() {
+export default function ProjectsClient({ projects }: { projects: Project[] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('All');
 
   const filteredProjects = useMemo(() => {
-    return PROJECTS.filter(project => {
+    return projects.filter(project => {
       // Search query filter (title, location, description, segment)
       const q = searchQuery.trim().toLowerCase();
       const matchesSearch = !q || (
@@ -169,7 +169,7 @@ export default function ProjectsClient() {
               {/* Counter & Reset */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                 <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 600 }}>
-                  Showing {filteredProjects.length} of {PROJECTS.length} projects
+                  Showing {filteredProjects.length} of {projects.length} projects
                 </span>
                 {hasActiveFilters && (
                   <button

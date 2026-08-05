@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { PROJECTS, getSpecsWithoutRera, formatPrice } from '@/data/projects';
+import { getSpecsWithoutRera, formatPrice } from '@/data/projects';
+import { getProjectBySlug, getProjects, getProjectSlugs } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PhotoGallery from '@/components/PhotoGallery';
@@ -11,12 +12,13 @@ import MobileBottomBar from '@/components/MobileBottomBar';
 import type { Metadata } from 'next';
 
 export async function generateStaticParams() {
-  return PROJECTS.map(p => ({ slug: p.slug }));
+  const slugs = await getProjectSlugs();
+  return slugs.map(slug => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const project = PROJECTS.find(p => p.slug === slug);
+  const project = await getProjectBySlug(slug);
   if (!project) return {};
 
   const pageTitle = `${project.title} · ${project.form} in ${project.location}`;
@@ -62,10 +64,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = PROJECTS.find(p => p.slug === slug);
+  const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
-  const related = PROJECTS.filter(p => p.slug !== project.slug).slice(0, 3);
+  const allProjects = await getProjects();
+  const related = allProjects.filter(p => p.slug !== project.slug).slice(0, 3);
   const cleanSpecs = getSpecsWithoutRera(project.specifications);
   const { main: priceMain, onwards } = formatPrice(project.price);
   const mapUrl = project.mapUrl || `https://maps.google.com/?q=${encodeURIComponent(project.title + ', ' + project.location)}`;
