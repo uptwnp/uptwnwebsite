@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Uptown Property Panipat',
+  title: 'Privacy Policy · Panipat',
   description: 'Privacy Policy of Uptown Property Panipat regarding personal data collection, usage, RERA compliance, and buyer protection.',
   alternates: {
     canonical: '/privacy',

@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Brokerage & Fees | Uptown Property Panipat',
+  title: 'Brokerage & Fees · Panipat',
   description: 'Transparent brokerage rates for new project bookings and resale properties in Panipat & NCR.',
   alternates: {
     canonical: '/fees',

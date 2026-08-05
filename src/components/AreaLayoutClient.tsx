@@ -9,7 +9,7 @@ function isPdf(url: string) {
   return url.toLowerCase().includes('.pdf');
 }
 
-/* ─── Full-screen Image Viewer ─── */
+/* ─── Full-screen Image Viewer Modal ─── */
 function ImageViewer({
   images,
   startIndex,
@@ -179,7 +179,7 @@ function ImageViewer({
         )}
       </div>
 
-      {/* Thumbnail strip (when multiple images) */}
+      {/* Thumbnail strip */}
       {images.length > 1 && (
         <div style={{
           display: 'flex', gap: 8, marginTop: 14, flexShrink: 0,
@@ -214,7 +214,7 @@ function ImageViewer({
   );
 }
 
-/* ─── Clean Layout Preview Component (Pure Preview) ─── */
+/* ─── Clean Full-Width Preview Card (Pure Preview Only) ─── */
 function LayoutPreviewCard({
   layout,
   onView,
@@ -226,38 +226,17 @@ function LayoutPreviewCard({
 
   return (
     <div style={{
+      width: '100%',
       background: 'var(--card)', border: '1px solid var(--border)',
       borderRadius: 24, overflow: 'hidden',
-      boxShadow: '0 4px 20px var(--shadow)',
-      display: 'flex', flexDirection: 'column',
+      boxShadow: '0 4px 24px var(--shadow)',
+      boxSizing: 'border-box',
     }}>
-      {/* Header info */}
-      <div style={{ padding: '18px 20px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-        <div>
-          <h2 style={{ margin: '0 0 4px', fontFamily: 'Archivo, sans-serif', fontWeight: 800, fontSize: 18, color: 'var(--ink)', lineHeight: 1.25 }}>
-            {layout.projectTitle}
-          </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--muted)', fontSize: 12 }}>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-            </svg>
-            {layout.location}
-          </div>
-        </div>
-
-        <span style={{
-          background: layout.type === 'Industrial' ? '#1a3a5c' : layout.type === 'Commercial' ? '#2d1a5c' : '#1a4a2a',
-          color: '#fff', fontSize: 10, fontWeight: 700,
-          padding: '3px 9px', borderRadius: 999, letterSpacing: '0.05em', textTransform: 'uppercase', flexShrink: 0,
-        }}>
-          {layout.type}
-        </span>
-      </div>
-
-      {/* Main Preview Container */}
+      {/* Main Full-Width Preview Area */}
       <div
+        className="preview-box"
         style={{
-          width: '100%', aspectRatio: '16/10',
+          width: '100%',
           background: 'var(--band)', position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           overflow: 'hidden', cursor: 'pointer',
@@ -265,20 +244,20 @@ function LayoutPreviewCard({
         onClick={() => onView(0)}
       >
         {mainIsPdf ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: 24, textAlign: 'center' }}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '48px 24px', textAlign: 'center' }}>
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14 2 14 8 20 8"/>
             </svg>
-            <span style={{ fontSize: 13, color: 'var(--ink)', fontWeight: 700 }}>PDF Layout Plan</span>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Click to view full screen</span>
+            <span style={{ fontSize: 16, color: 'var(--ink)', fontWeight: 700 }}>PDF Layout Plan</span>
+            <span style={{ fontSize: 13, color: 'var(--muted)' }}>Click to view full screen</span>
           </div>
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={layout.imageUrl}
             alt={`${layout.projectTitle} layout preview`}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'var(--band)', display: 'block' }}
           />
         )}
 
@@ -291,17 +270,17 @@ function LayoutPreviewCard({
         }}>
           <div style={{
             background: 'rgba(255,255,255,0.92)', borderRadius: 999,
-            padding: '8px 20px', display: 'flex', alignItems: 'center', gap: 7,
-            fontWeight: 700, fontSize: 13, color: '#15130F',
+            padding: '10px 22px', display: 'flex', alignItems: 'center', gap: 8,
+            fontWeight: 700, fontSize: 14, color: '#15130F',
           }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
             </svg>
             Click to View Full Screen
           </div>
         </div>
 
-        {/* Individual Download Icon Floating Button */}
+        {/* Floating Download Icon Button */}
         <a
           href={layout.images[0].url}
           download
@@ -310,14 +289,15 @@ function LayoutPreviewCard({
           onClick={e => e.stopPropagation()}
           title="Download layout"
           style={{
-            position: 'absolute', bottom: 12, right: 12,
+            position: 'absolute', bottom: 14, right: 14,
             background: 'var(--gold)', color: '#15130F',
-            borderRadius: '50%', width: 36, height: 36,
+            borderRadius: '50%', width: 42, height: 42,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.2)', textDecoration: 'none',
+            boxShadow: '0 4px 14px rgba(0,0,0,0.25)', textDecoration: 'none',
+            zIndex: 3,
           }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
             <line x1="12" y1="15" x2="12" y2="3"/>
@@ -327,13 +307,13 @@ function LayoutPreviewCard({
 
       {/* Thumbnail row if multiple images */}
       {layout.images.length > 1 && (
-        <div style={{ display: 'flex', gap: 8, padding: '12px 16px', overflowX: 'auto', borderTop: '1px solid var(--divider)' }}>
+        <div style={{ display: 'flex', gap: 10, padding: '14px 18px', overflowX: 'auto', borderTop: '1px solid var(--divider)' }}>
           {layout.images.map((img, i) => (
             <button
               key={i}
               onClick={() => onView(i)}
               style={{
-                flexShrink: 0, width: 72, height: 48, borderRadius: 8, overflow: 'hidden',
+                flexShrink: 0, width: 80, height: 54, borderRadius: 10, overflow: 'hidden',
                 border: '2px solid var(--border)',
                 background: 'var(--band)', cursor: 'pointer', padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -343,7 +323,7 @@ function LayoutPreviewCard({
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
             >
               {isPdf(img.url) ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                   <polyline points="14 2 14 8 20 8"/>
                 </svg>
@@ -451,7 +431,7 @@ export default function AreaLayoutClient({
               </h1>
 
               <p style={{ margin: '0 0 20px', fontSize: 14, color: 'var(--muted)', lineHeight: 1.6, maxWidth: '52ch' }}>
-                {layouts.length} layout {layouts.length === 1 ? 'plan' : 'plans'} available for {areaLabel}, {cityLabel}. Click any preview to view full screen.
+                {layouts.length} layout {layouts.length === 1 ? 'plan' : 'plans'} available for {areaLabel}, {cityLabel}. Click preview to view full screen.
               </p>
 
               {/* Stats row */}
@@ -519,8 +499,8 @@ export default function AreaLayoutClient({
           {/* Divider */}
           <div style={{ height: 1, background: 'var(--divider)', margin: '28px 0' }} />
 
-          {/* Layout previews grid */}
-          <div className="area-layouts-grid">
+          {/* Full-width Layout Previews Stack */}
+          <div className="area-layouts-stack">
             {layouts.map((layout, idx) => (
               <LayoutPreviewCard
                 key={layout.id}
@@ -560,10 +540,16 @@ export default function AreaLayoutClient({
         .area-hero { width: 100%; }
         .area-hero-text { max-width: 640px; }
 
-        .area-layouts-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 24px;
+        .area-layouts-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 28px;
+          width: 100%;
+        }
+
+        .preview-box {
+          aspect-ratio: 16 / 9;
+          max-height: 70vh;
         }
 
         @media (max-width: 640px) {
@@ -576,16 +562,12 @@ export default function AreaLayoutClient({
             justify-content: center !important;
             box-sizing: border-box;
           }
-          .area-layouts-grid {
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
+          .preview-box {
+            aspect-ratio: 4 / 3;
+            max-height: 55vh;
           }
-        }
-
-        @media (min-width: 641px) and (max-width: 768px) {
-          .area-layouts-grid {
-            grid-template-columns: 1fr !important;
-            gap: 18px !important;
+          .area-layouts-stack {
+            gap: 20px;
           }
         }
       `}</style>

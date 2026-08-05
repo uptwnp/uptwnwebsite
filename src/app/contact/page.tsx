@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Uptown Property Panipat',
+  title: 'Contact Us · Panipat',
   description: 'Get in touch with Uptown Property Panipat for project inquiries, site visits, and legal support. Call +91 95180 91945.',
   alternates: {
     canonical: '/contact',

@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | Uptown Property Panipat',
+  title: 'Terms & Conditions · Panipat',
   description: 'Terms of service, RERA advisories, site visit guidelines, and client agreements for Uptown Property Panipat.',
   alternates: {
     canonical: '/terms',

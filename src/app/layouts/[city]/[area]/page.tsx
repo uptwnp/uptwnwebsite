@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   const first = layouts[0];
   const cityLabel = formatCityLabel(city);
-  const title = `${first.areaLabel} Layout Plans · ${cityLabel} | Uptown Property`;
+  const title = `${first.areaLabel} Layout Plans · ${cityLabel}`;
   const description = `Download layout plans for ${first.areaLabel}, ${cityLabel}. ${layouts.map(l => l.projectTitle).join(', ')} — RERA-approved real estate projects.`;
 
   return {
