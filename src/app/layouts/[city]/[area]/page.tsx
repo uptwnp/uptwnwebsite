@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { formatCityLabel } from '@/data/layouts';
-import { getLayoutsByAreaDB, getLayoutAreaParams } from '@/lib/supabase';
+import { getSingleLayoutDB, getLayoutsByAreaDB, getLayouts, getLayoutAreaParams } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 import AreaLayoutClient from '@/components/AreaLayoutClient';
+import SingleLayoutClient from '@/components/SingleLayoutClient';
 
 /* ─── Static params generation ─── */
 export async function generateStaticParams() {
@@ -19,6 +19,36 @@ export async function generateMetadata({
   params: Promise<{ city: string; area: string }>;
 }): Promise<Metadata> {
   const { city, area } = await params;
+
+  // 1. Single layout
+  const single = await getSingleLayoutDB(city, area);
+  if (single) {
+    const cityLabel = formatCityLabel(city);
+    const title = `${single.projectTitle} Layout Plan · ${cityLabel}`;
+    const description = `Download and view layout plan for ${single.projectTitle} in ${single.location}. ${single.description ?? ''}`;
+    return {
+      title,
+      description,
+      alternates: { canonical: `/layouts/${city}/${single.slug}` },
+      openGraph: {
+        title,
+        description,
+        url: `https://uptownproperty.in/layouts/${city}/${single.slug}`,
+        siteName: 'Uptown Property',
+        images: [{ url: single.imageUrl.endsWith('.pdf') ? '/uptown-logo-with-slogan.png' : single.imageUrl, width: 1200, height: 630, alt: title }],
+        locale: 'en_IN',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [single.imageUrl.endsWith('.pdf') ? '/uptown-logo-with-slogan.png' : single.imageUrl],
+      },
+    };
+  }
+
+  // 2. Area layouts
   const layouts = await getLayoutsByAreaDB(city, area);
   if (!layouts.length) return {};
 
@@ -50,20 +80,48 @@ export async function generateMetadata({
 }
 
 /* ─── Page ─── */
-export default async function AreaLayoutPage({
+export default async function AreaOrSingleLayoutPage({
   params,
 }: {
   params: Promise<{ city: string; area: string }>;
 }) {
   const { city, area } = await params;
-  const layouts = await getLayoutsByAreaDB(city, area);
 
+  // 1. Try single layout match first
+  const single = await getSingleLayoutDB(city, area);
+  if (single) {
+    const allLayouts = await getLayouts();
+    const otherLayouts = allLayouts.filter(l => l.id !== single.id);
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: `${single.projectTitle} Layout Plan`,
+      description: single.description ?? `Layout plan for ${single.projectTitle} in ${single.location}`,
+      image: single.imageUrl,
+      url: `https://uptownproperty.in/layouts/${city}/${single.slug}`,
+    };
+
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <Navbar />
+        <SingleLayoutClient layout={single} otherLayouts={otherLayouts} />
+        <Footer />
+      </>
+    );
+  }
+
+  // 2. Fall back to area layouts
+  const layouts = await getLayoutsByAreaDB(city, area);
   if (!layouts.length) notFound();
 
   const cityLabel = formatCityLabel(city);
   const areaLabel = layouts[0].areaLabel;
 
-  /* JSON-LD structured data */
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -75,7 +133,7 @@ export default async function AreaLayoutPage({
       '@type': 'ListItem',
       position: i + 1,
       name: l.projectTitle,
-      url: `https://uptownproperty.in/layouts/${city}/${area}`,
+      url: `https://uptownproperty.in/layouts/${city}/${l.slug}`,
     })),
   };
 
@@ -97,3 +155,4 @@ export default async function AreaLayoutPage({
     </>
   );
 }
+

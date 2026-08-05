@@ -13,6 +13,8 @@ export interface LayoutItem {
   areaSlug: string;
   /** Human-readable area name for display */
   areaLabel: string;
+  /** Unique layout slug — used in URL: /layouts/[city]/[slug] */
+  slug: string;
   type: 'Residential' | 'Industrial' | 'Commercial';
   tags: string[];
   /** Primary preview image/PDF URL */

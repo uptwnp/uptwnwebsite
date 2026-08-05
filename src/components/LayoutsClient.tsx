@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 /* ─── Layout Card — Clean text-focused card linking to /layouts/[city]/[area] ─── */
 function LayoutCard({ item }: { item: LayoutItem }) {
   const router = useRouter();
-  const href = `/layouts/${item.citySlug}/${item.areaSlug}`;
+  const href = `/layouts/${item.citySlug}/${item.slug}`;
 
   return (
     <div

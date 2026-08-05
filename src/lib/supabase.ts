@@ -152,6 +152,11 @@ interface LayoutRow {
   sort_order: number | null;
 }
 
+export function getLayoutSlug(row: { id: string }): string {
+  if (row.id === 'supervesh-layout') return 'supervesh-enclave';
+  return row.id.replace(/-layout$/, '');
+}
+
 function layoutRowToItem(row: LayoutRow): LayoutItem {
   return {
     id: row.id,
@@ -160,6 +165,7 @@ function layoutRowToItem(row: LayoutRow): LayoutItem {
     citySlug: row.city_slug,
     areaSlug: row.area_slug,
     areaLabel: row.area_label,
+    slug: getLayoutSlug(row),
     type: row.type,
     tags: row.tags ?? [],
     imageUrl: row.image_url,
@@ -187,6 +193,16 @@ export async function getLayouts(): Promise<LayoutItem[]> {
   }
 }
 
+/** Fetch single layout by city + slug */
+export async function getSingleLayoutDB(city: string, slug: string): Promise<LayoutItem | null> {
+  try {
+    const layouts = await getLayouts();
+    return layouts.find(l => l.citySlug === city && l.slug === slug) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** Fetch layouts filtered by city + area */
 export async function getLayoutsByAreaDB(city: string, area: string): Promise<LayoutItem[]> {
   try {
@@ -207,7 +223,7 @@ export async function getLayoutsByAreaDB(city: string, area: string): Promise<La
   }
 }
 
-/** Get all unique city+area combos for generateStaticParams */
+/** Get all unique city+area and city+slug combos for generateStaticParams */
 export async function getLayoutAreaParams(): Promise<{ city: string; area: string }[]> {
   try {
     const supabase = getSupabaseClient();
@@ -215,18 +231,28 @@ export async function getLayoutAreaParams(): Promise<{ city: string; area: strin
 
     const { data, error } = await supabase
       .from('layouts')
-      .select('city_slug, area_slug')
+      .select('id, city_slug, area_slug')
       .order('sort_order', { ascending: true });
 
     if (error || !data || data.length === 0) return [];
 
     const seen = new Set<string>();
     const params: { city: string; area: string }[] = [];
-    for (const row of data as { city_slug: string; area_slug: string }[]) {
-      const key = `${row.city_slug}/${row.area_slug}`;
-      if (!seen.has(key)) {
-        seen.add(key);
+
+    for (const row of data as { id: string; city_slug: string; area_slug: string }[]) {
+      // Area param
+      const areaKey = `${row.city_slug}/${row.area_slug}`;
+      if (!seen.has(areaKey)) {
+        seen.add(areaKey);
         params.push({ city: row.city_slug, area: row.area_slug });
+      }
+
+      // Single layout slug param
+      const layoutSlug = getLayoutSlug(row);
+      const slugKey = `${row.city_slug}/${layoutSlug}`;
+      if (!seen.has(slugKey)) {
+        seen.add(slugKey);
+        params.push({ city: row.city_slug, area: layoutSlug });
       }
     }
     return params;

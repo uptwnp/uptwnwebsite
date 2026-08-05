@@ -9,7 +9,7 @@ function isPdf(url: string) {
   return url.toLowerCase().includes('.pdf');
 }
 
-/* ─── Full-screen Image Viewer Modal ─── */
+/* ─── Full-screen Viewer Modal ─── */
 function ImageViewer({
   images,
   startIndex,
@@ -71,11 +71,11 @@ function ImageViewer({
         marginBottom: 14, flexShrink: 0, gap: 12,
       }}>
         <div>
-          <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, fontFamily: 'Archivo, sans-serif' }}>
+          <div style={{ color: '#fff', fontWeight: 700, fontSize: 16, fontFamily: 'Archivo, sans-serif' }}>
             {projectTitle}
           </div>
           {img.label && (
-            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginTop: 2 }}>
+            <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, marginTop: 2 }}>
               {img.label} {images.length > 1 && `· ${current + 1} / ${images.length}`}
             </div>
           )}
@@ -116,7 +116,7 @@ function ImageViewer({
         </div>
       </div>
 
-      {/* Main image area */}
+      {/* Main viewer area */}
       <div style={{
         position: 'relative', flex: 1, width: '100%', maxWidth: 1100,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -135,34 +135,20 @@ function ImageViewer({
         )}
 
         {pdf ? (
-          <div style={{
-            width: '100%', height: '65vh', background: '#1a1a1a', borderRadius: 14,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16,
-            animation: 'alyScale 0.2s ease',
-          }}>
-            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <div style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: 15 }}>PDF Layout</div>
-            <a href={img.url} target="_blank" rel="noopener noreferrer" style={{
-              marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 7,
-              background: 'var(--gold)', color: '#15130F',
-              fontWeight: 700, fontSize: 14, padding: '10px 24px', borderRadius: 999, textDecoration: 'none',
-            }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-              Open / Download PDF
-            </a>
-          </div>
+          <iframe
+            src={`${img.url}#toolbar=0&navpanes=0`}
+            title={`${projectTitle} PDF Viewer`}
+            style={{
+              width: '100%', height: '75vh', background: '#ffffff', borderRadius: 14,
+              border: 'none', animation: 'alyScale 0.2s ease',
+            }}
+          />
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={img.url}
             alt={img.label ?? 'Layout plan'}
-            style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: 12, display: 'block', animation: 'alyScale 0.2s ease' }}
+            style={{ maxWidth: '100%', maxHeight: '75vh', objectFit: 'contain', borderRadius: 12, display: 'block', animation: 'alyScale 0.2s ease' }}
           />
         )}
 
@@ -214,7 +200,7 @@ function ImageViewer({
   );
 }
 
-/* ─── Clean Full-Width Preview Card (Pure Preview Only) ─── */
+/* ─── Layout Card with Full Header & Preview ─── */
 function LayoutPreviewCard({
   layout,
   onView,
@@ -225,84 +211,176 @@ function LayoutPreviewCard({
   const mainIsPdf = isPdf(layout.imageUrl);
 
   return (
-    <div style={{
-      width: '100%',
-      background: 'var(--card)', border: '1px solid var(--border)',
-      borderRadius: 24, overflow: 'hidden',
-      boxShadow: '0 4px 24px var(--shadow)',
-      boxSizing: 'border-box',
-    }}>
+    <div
+      id={layout.id}
+      style={{
+        width: '100%',
+        background: 'var(--card)', border: '1px solid var(--border)',
+        borderRadius: 24, overflow: 'hidden',
+        boxShadow: '0 4px 24px var(--shadow)',
+        boxSizing: 'border-box',
+        display: 'flex', flexDirection: 'column',
+      }}
+    >
+      {/* Card Header Info */}
+      <div style={{ padding: '22px 24px', display: 'flex', flexDirection: 'column', gap: 10, borderBottom: '1px solid var(--divider)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <h2 style={{ margin: 0, fontFamily: 'Archivo, sans-serif', fontWeight: 800, fontSize: 'clamp(20px, 3vw, 24px)', color: 'var(--ink)' }}>
+              {layout.projectTitle}
+            </h2>
+            <span style={{
+              background: layout.type === 'Industrial' ? '#1a3a5c' : layout.type === 'Commercial' ? '#2d1a5c' : '#1a4a2a',
+              color: '#fff', fontSize: 11, fontWeight: 700,
+              padding: '4px 12px', borderRadius: 999, letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+            }}>
+              {layout.type}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            {layout.projectSlug && (
+              <Link
+                href={`/projects/${layout.projectSlug}`}
+                style={{
+                  fontSize: 13, fontWeight: 600, color: 'var(--ink)',
+                  textDecoration: 'none', padding: '7px 16px', borderRadius: 999,
+                  border: '1px solid var(--border)', background: 'var(--bg)',
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  transition: 'border-color 0.15s',
+                }}
+              >
+                View Project Details
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </Link>
+            )}
+            <a
+              href={layout.images[0].url}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: 13, fontWeight: 700, color: '#15130F',
+                background: 'var(--gold)', padding: '7px 18px', borderRadius: 999,
+                textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6,
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download
+            </a>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', fontSize: 13, color: 'var(--muted)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontWeight: 500 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            {layout.location}
+          </span>
+          {layout.tags && layout.tags.map(tag => (
+            <span key={tag} style={{
+              fontSize: 11, fontWeight: 600, color: 'var(--muted)',
+              background: 'var(--band)', border: '1px solid var(--border)',
+              padding: '2px 8px', borderRadius: 999,
+            }}>{tag}</span>
+          ))}
+        </div>
+
+        {layout.description && (
+          <p style={{ margin: 0, fontSize: 14, color: 'var(--muted)', lineHeight: 1.5 }}>
+            {layout.description}
+          </p>
+        )}
+      </div>
+
       {/* Main Full-Width Preview Area */}
       <div
         className="preview-box"
         style={{
           width: '100%',
-          background: 'var(--band)', position: 'relative',
+          background: mainIsPdf ? '#f8f9fa' : 'var(--band)', position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          overflow: 'hidden', cursor: 'pointer',
+          overflow: 'hidden',
+          minHeight: mainIsPdf ? 540 : undefined,
         }}
-        onClick={() => onView(0)}
       >
         {mainIsPdf ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '48px 24px', textAlign: 'center' }}>
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <span style={{ fontSize: 16, color: 'var(--ink)', fontWeight: 700 }}>PDF Layout Plan</span>
-            <span style={{ fontSize: 13, color: 'var(--muted)' }}>Click to view full screen</span>
-          </div>
+          <iframe
+            src={`${layout.imageUrl}#toolbar=0&navpanes=0&view=FitH`}
+            title={`${layout.projectTitle} Layout`}
+            style={{
+              width: '100%',
+              height: '100%',
+              minHeight: '540px',
+              border: 'none',
+              background: '#ffffff',
+            }}
+          />
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={layout.imageUrl}
             alt={`${layout.projectTitle} layout preview`}
-            style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'var(--band)', display: 'block' }}
+            onClick={() => onView(0)}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'var(--band)', display: 'block', cursor: 'pointer' }}
           />
         )}
 
-        {/* Hover overlay */}
-        <div className="det-overlay" style={{
-          position: 'absolute', inset: 0,
-          background: 'rgba(0,0,0,0.35)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          opacity: 0, transition: 'opacity 0.2s',
-        }}>
-          <div style={{
-            background: 'rgba(255,255,255,0.92)', borderRadius: 999,
-            padding: '10px 22px', display: 'flex', alignItems: 'center', gap: 8,
-            fontWeight: 700, fontSize: 14, color: '#15130F',
-          }}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-            </svg>
-            Click to View Full Screen
+        {/* Hover overlay for images */}
+        {!mainIsPdf && (
+          <div
+            className="det-overlay"
+            onClick={() => onView(0)}
+            style={{
+              position: 'absolute', inset: 0,
+              background: 'rgba(0,0,0,0.35)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.2s', cursor: 'pointer',
+            }}
+          >
+            <div style={{
+              background: 'rgba(255,255,255,0.92)', borderRadius: 999,
+              padding: '10px 22px', display: 'flex', alignItems: 'center', gap: 8,
+              fontWeight: 700, fontSize: 14, color: '#15130F',
+            }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+              Click to View Full Screen
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Floating Download Icon Button */}
-        <a
-          href={layout.images[0].url}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={e => e.stopPropagation()}
-          title="Download layout"
-          style={{
-            position: 'absolute', bottom: 14, right: 14,
-            background: 'var(--gold)', color: '#15130F',
-            borderRadius: '50%', width: 42, height: 42,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 14px rgba(0,0,0,0.25)', textDecoration: 'none',
-            zIndex: 3,
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-        </a>
+        {/* Fullscreen button for PDF */}
+        {mainIsPdf && (
+          <button
+            onClick={() => onView(0)}
+            title="Expand Full Screen"
+            style={{
+              position: 'absolute', top: 14, right: 14,
+              background: 'rgba(0,0,0,0.75)', color: '#fff',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: 999, padding: '8px 16px',
+              display: 'flex', alignItems: 'center', gap: 6,
+              fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
+              zIndex: 3, backdropFilter: 'blur(4px)',
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+            Full Screen
+          </button>
+        )}
       </div>
 
       {/* Thumbnail row if multiple images */}
@@ -354,6 +432,17 @@ export default function AreaLayoutClient({
   areaLabel: string;
 }) {
   const [viewer, setViewer] = useState<{ layoutIdx: number; imgIdx: number } | null>(null);
+
+  /* Auto-scroll to target hash if provided in URL */
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const id = decodeURIComponent(window.location.hash.substring(1));
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+      }
+    }
+  }, []);
 
   /* Download all for this area */
   const downloadAll = () => {
