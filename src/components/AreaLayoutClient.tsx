@@ -209,6 +209,11 @@ function LayoutPreviewCard({
   onView: (imgIndex: number) => void;
 }) {
   const mainIsPdf = isPdf(layout.imageUrl);
+  const [isMediaLoading, setIsMediaLoading] = useState(true);
+
+  useEffect(() => {
+    setIsMediaLoading(true);
+  }, [layout.imageUrl]);
 
   return (
     <div
@@ -312,10 +317,37 @@ function LayoutPreviewCard({
           minHeight: mainIsPdf ? 540 : undefined,
         }}
       >
+        {isMediaLoading && (
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 2,
+            background: 'var(--card)', display: 'flex',
+            flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'center', gap: 16, padding: 24,
+            textAlign: 'center', boxSizing: 'border-box',
+          }}>
+            <div style={{
+              width: 44, height: 44,
+              border: '3px solid var(--border)',
+              borderTopColor: 'var(--gold)',
+              borderRadius: '50%',
+              animation: 'spin 0.8s linear infinite',
+            }} />
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>
+                Loading Layout Plan...
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
+                Rendering map for {layout.projectTitle}
+              </div>
+            </div>
+          </div>
+        )}
+
         {mainIsPdf ? (
           <iframe
             src={`${layout.imageUrl}#toolbar=0&navpanes=0&view=FitH`}
             title={`${layout.projectTitle} Layout`}
+            onLoad={() => setIsMediaLoading(false)}
             style={{
               width: '100%',
               height: '100%',
@@ -329,6 +361,7 @@ function LayoutPreviewCard({
           <img
             src={layout.imageUrl}
             alt={`${layout.projectTitle} layout preview`}
+            onLoad={() => setIsMediaLoading(false)}
             onClick={() => onView(0)}
             style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'var(--band)', display: 'block', cursor: 'pointer' }}
           />
@@ -623,6 +656,9 @@ export default function AreaLayoutClient({
       </main>
 
       <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
         .det-overlay { opacity: 0; transition: opacity 0.2s; }
         div:hover > .det-overlay { opacity: 1 !important; }
 

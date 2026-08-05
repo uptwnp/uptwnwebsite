@@ -257,9 +257,14 @@ export default function SingleLayoutClient({
 }) {
   const [selectedImgIdx, setSelectedImgIdx] = useState(0);
   const [showViewer, setShowViewer] = useState(false);
+  const [isMediaLoading, setIsMediaLoading] = useState(true);
 
   const currentMedia = layout.images[selectedImgIdx] ?? layout.images[0];
   const currentIsPdf = isPdf(currentMedia.url);
+
+  useEffect(() => {
+    setIsMediaLoading(true);
+  }, [currentMedia.url]);
 
   return (
     <>
@@ -391,10 +396,37 @@ export default function SingleLayoutClient({
               minHeight: currentIsPdf ? 620 : 450,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
+              {isMediaLoading && (
+                <div style={{
+                  position: 'absolute', inset: 0, zIndex: 2,
+                  background: 'var(--card)', display: 'flex',
+                  flexDirection: 'column', alignItems: 'center',
+                  justifyContent: 'center', gap: 16, padding: 24,
+                  textAlign: 'center', boxSizing: 'border-box',
+                }}>
+                  <div style={{
+                    width: 44, height: 44,
+                    border: '3px solid var(--border)',
+                    borderTopColor: 'var(--gold)',
+                    borderRadius: '50%',
+                    animation: 'spin 0.8s linear infinite',
+                  }} />
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--ink)' }}>
+                      Loading Layout Plan...
+                    </div>
+                    <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
+                      High resolution layout map rendering
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {currentIsPdf ? (
                 <iframe
                   src={`${currentMedia.url}#toolbar=0&navpanes=0&view=FitH`}
                   title={`${layout.projectTitle} Layout Viewer`}
+                  onLoad={() => setIsMediaLoading(false)}
                   style={{
                     width: '100%', height: '70vh', minHeight: '620px',
                     border: 'none', background: '#ffffff',
@@ -405,6 +437,7 @@ export default function SingleLayoutClient({
                 <img
                   src={currentMedia.url}
                   alt={`${layout.projectTitle} Layout Plan`}
+                  onLoad={() => setIsMediaLoading(false)}
                   onClick={() => setShowViewer(true)}
                   style={{ width: '100%', height: '100%', maxHeight: '75vh', objectFit: 'contain', cursor: 'pointer', display: 'block' }}
                 />
@@ -491,6 +524,11 @@ export default function SingleLayoutClient({
 
         </div>
       </main>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </>
   );
 }
