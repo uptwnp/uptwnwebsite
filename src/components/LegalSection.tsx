@@ -52,7 +52,7 @@ export default function LegalSection({ project }: { project: Project }) {
             Disclaimer & Advisory
           </span>
           <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: 'var(--muted)' }}>
-            Property details and RERA information shown are compiled from developer filings and official RERA portals. Buyers are requested to verify title deeds, RERA numbers, and statutory approvals before agreement.
+            Property details and RERA information shown are compiled from publicly available sources and local market dealers. Information may be subject to change, potentially inaccurate, or outdated. Buyers are requested to independently verify title deeds, RERA numbers, rates, and statutory approvals before agreement.
           </p>
         </div>
       </div>

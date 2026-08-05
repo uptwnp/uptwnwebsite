@@ -70,7 +70,7 @@ export default function TermsPage() {
                 Uptown Property acts as a licensed real estate channel partner and consultant for verified developers and private plot owners in Panipat and NCR.
               </p>
               <ul style={{ paddingLeft: 20, marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <li>Project details, floor plans, specifications, and prices listed are provided based on developer filings and official RERA disclosures.</li>
+                <li>Project details, floor plans, specifications, and prices listed are compiled from publicly available sources and local market dealers, and may be subject to change, incomplete, or outdated.</li>
                 <li>All prospective buyers are advised to independently verify title deeds, RERA numbers, layout approvals, and physical site measurements before signing any booking agreement or paying token money.</li>
               </ul>
             </div>
