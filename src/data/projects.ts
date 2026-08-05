@@ -295,7 +295,7 @@ export const PROJECTS: Project[] = [
     price: '₹50,000 / sq yd',
     area: '143–180 sq yd',
     units: 'Limited Inventory',
-    possession: '9 Months EMI Plan',
+    possession: 'Approx. 1–1.5 Years',
     total: 'Residential Township',
     bookingAmount: '₹11 Lakhs',
     paymentPlan: {
