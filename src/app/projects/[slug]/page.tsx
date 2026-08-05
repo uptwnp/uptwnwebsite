@@ -188,6 +188,88 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 </section>
               )}
 
+              {/* Payment Plan Section */}
+              {(project.paymentPlan || project.bookingAmount) && (
+                <section style={{ paddingTop: 36 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                    <h2 style={{ margin: 0, fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 22, letterSpacing: '-0.01em', color: 'var(--ink)' }}>
+                      Payment Plan
+                    </h2>
+                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(212, 163, 89, 0.12)', color: 'var(--gold)', padding: '4px 10px', borderRadius: 999, border: '1px solid rgba(212, 163, 89, 0.25)' }}>
+                      Flexible Terms
+                    </span>
+                  </div>
+                  
+                  <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {/* Booking Amount Banner */}
+                    {(project.paymentPlan?.bookingAmount || project.bookingAmount) && (
+                      <div style={{
+                        background: 'linear-gradient(135deg, rgba(212,163,89,0.15) 0%, rgba(212,163,89,0.05) 100%)',
+                        border: '1px solid rgba(212, 163, 89, 0.3)',
+                        borderRadius: 12,
+                        padding: '14px 18px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 12,
+                      }}>
+                        <div>
+                          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: 2 }}>
+                            Booking Amount / Token
+                          </span>
+                          <span style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 20, color: 'var(--gold)' }}>
+                            {project.paymentPlan?.bookingAmount || project.bookingAmount}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: 24 }}>💳</span>
+                      </div>
+                    )}
+
+                    {/* Timeline Steps */}
+                    {project.paymentPlan?.steps && project.paymentPlan.steps.length > 0 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 4 }}>
+                        {project.paymentPlan.steps.map((step, idx) => (
+                          <div key={idx} style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: 14,
+                            padding: '12px 14px',
+                            background: 'var(--bg)',
+                            borderRadius: 12,
+                            border: '1px solid var(--border)'
+                          }}>
+                            <div style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: '50%',
+                              background: 'var(--gold)',
+                              color: '#15130F',
+                              fontWeight: 700,
+                              fontSize: 13,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              marginTop: 2
+                            }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', display: 'block' }}>
+                                {step.title}
+                              </span>
+                              <span style={{ fontSize: 14, color: 'var(--text)', display: 'block', marginTop: 2 }}>
+                                {step.detail}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              )}
+
               {/* Specifications */}
               {Object.keys(cleanSpecs).length > 0 && (
                 <section style={{ paddingTop: 36 }}>

@@ -1,3 +1,8 @@
+export interface PaymentStep {
+  title: string;
+  detail: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -12,6 +17,10 @@ export interface Project {
   possession: string;
   total: string;
   bookingAmount?: string;
+  paymentPlan?: {
+    bookingAmount?: string;
+    steps?: PaymentStep[];
+  };
   description: string;
   details: string[];
   features: string[];
@@ -289,6 +298,14 @@ export const PROJECTS: Project[] = [
     possession: '9 Months EMI Plan',
     total: 'Residential Township',
     bookingAmount: '₹11 Lakhs',
+    paymentPlan: {
+      bookingAmount: '₹11 Lakhs',
+      steps: [
+        { title: 'Booking Amount', detail: '₹11 Lakh Booking Amount' },
+        { title: 'After RERA Approval', detail: 'Approx. 50% Clear in 30 Days' },
+        { title: 'After Allotment EMI', detail: '9 Months Every Month' },
+      ],
+    },
     description: 'Premium residential plotted township on main GT Road / NH 44, Panipat with 143 to 180 sq yd plots.',
     details: [
       'NYSA Residential Township offers 143 to 180 sq. yd. residential plots at a pre-launch price of ₹50,000 per sq. yd. on main GT Road / NH 44, Panipat.',
