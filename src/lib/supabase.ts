@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import { PROJECTS, type Project } from '@/data/projects';
-import { LAYOUTS, getAllLayoutParams, getLayoutsByArea as getLayoutsByAreaStatic, type LayoutItem } from '@/data/layouts';
+import type { Project } from '@/data/projects';
+import type { LayoutItem } from '@/data/layouts';
 
 // ── DB row type (snake_case columns from Supabase) ──────────────────────────
 interface ProjectRow {
@@ -72,13 +72,13 @@ function rowToProject(row: ProjectRow): Project {
   };
 }
 
-// ── Public helpers with Static Data Fallbacks for Safe Builds ─────────────────
+// ── Public helpers (Pure Supabase DB fetch) ──────────────────────────────────
 
 /** Fetch all projects ordered by sort_order, then id */
 export async function getProjects(): Promise<Project[]> {
   try {
     const supabase = getSupabaseClient();
-    if (!supabase) return PROJECTS;
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from('projects')
@@ -86,10 +86,10 @@ export async function getProjects(): Promise<Project[]> {
       .order('sort_order', { ascending: true })
       .order('id', { ascending: true });
 
-    if (error || !data) return PROJECTS;
+    if (error || !data) return [];
     return (data as ProjectRow[]).map(rowToProject);
   } catch {
-    return PROJECTS;
+    return [];
   }
 }
 
@@ -97,7 +97,7 @@ export async function getProjects(): Promise<Project[]> {
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   try {
     const supabase = getSupabaseClient();
-    if (!supabase) return PROJECTS.find(p => p.slug === slug) ?? null;
+    if (!supabase) return null;
 
     const { data, error } = await supabase
       .from('projects')
@@ -106,11 +106,11 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       .single();
 
     if (error || !data) {
-      return PROJECTS.find(p => p.slug === slug) ?? null;
+      return null;
     }
     return rowToProject(data as ProjectRow);
   } catch {
-    return PROJECTS.find(p => p.slug === slug) ?? null;
+    return null;
   }
 }
 
@@ -118,17 +118,17 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 export async function getProjectSlugs(): Promise<string[]> {
   try {
     const supabase = getSupabaseClient();
-    if (!supabase) return PROJECTS.map(p => p.slug);
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from('projects')
       .select('slug')
       .order('sort_order', { ascending: true });
 
-    if (error || !data || data.length === 0) return PROJECTS.map(p => p.slug);
+    if (error || !data || data.length === 0) return [];
     return (data as { slug: string }[]).map(r => r.slug);
   } catch {
-    return PROJECTS.map(p => p.slug);
+    return [];
   }
 }
 
@@ -173,17 +173,17 @@ function layoutRowToItem(row: LayoutRow): LayoutItem {
 export async function getLayouts(): Promise<LayoutItem[]> {
   try {
     const supabase = getSupabaseClient();
-    if (!supabase) return LAYOUTS;
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from('layouts')
       .select('*')
       .order('sort_order', { ascending: true });
 
-    if (error || !data || data.length === 0) return LAYOUTS;
+    if (error || !data || data.length === 0) return [];
     return (data as LayoutRow[]).map(layoutRowToItem);
   } catch {
-    return LAYOUTS;
+    return [];
   }
 }
 
@@ -191,7 +191,7 @@ export async function getLayouts(): Promise<LayoutItem[]> {
 export async function getLayoutsByAreaDB(city: string, area: string): Promise<LayoutItem[]> {
   try {
     const supabase = getSupabaseClient();
-    if (!supabase) return getLayoutsByAreaStatic(city, area);
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from('layouts')
@@ -200,10 +200,10 @@ export async function getLayoutsByAreaDB(city: string, area: string): Promise<La
       .eq('area_slug', area)
       .order('sort_order', { ascending: true });
 
-    if (error || !data || data.length === 0) return getLayoutsByAreaStatic(city, area);
+    if (error || !data || data.length === 0) return [];
     return (data as LayoutRow[]).map(layoutRowToItem);
   } catch {
-    return getLayoutsByAreaStatic(city, area);
+    return [];
   }
 }
 
@@ -211,14 +211,14 @@ export async function getLayoutsByAreaDB(city: string, area: string): Promise<La
 export async function getLayoutAreaParams(): Promise<{ city: string; area: string }[]> {
   try {
     const supabase = getSupabaseClient();
-    if (!supabase) return getAllLayoutParams();
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from('layouts')
       .select('city_slug, area_slug')
       .order('sort_order', { ascending: true });
 
-    if (error || !data || data.length === 0) return getAllLayoutParams();
+    if (error || !data || data.length === 0) return [];
 
     const seen = new Set<string>();
     const params: { city: string; area: string }[] = [];
@@ -231,6 +231,6 @@ export async function getLayoutAreaParams(): Promise<{ city: string; area: strin
     }
     return params;
   } catch {
-    return getAllLayoutParams();
+    return [];
   }
 }

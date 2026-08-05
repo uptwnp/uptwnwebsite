@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { PROJECTS, FILTER_TABS, FilterTab, filterProjects } from '@/data/projects';
+import { type Project, FILTER_TABS, FilterTab, filterProjects } from '@/data/projects';
 import ProjectCard from '@/components/ProjectCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -21,9 +21,9 @@ const SOCIAL = [
   { name: 'WhatsApp', sub: 'Daily new inventory', href: 'https://wa.me/919518091945' },
 ];
 
-export default function HomeClient() {
+export default function HomeClient({ projects = [] }: { projects?: Project[] }) {
   const [activeTab, setActiveTab] = useState<FilterTab>('All');
-  const shown = filterProjects(PROJECTS, activeTab);
+  const shown = filterProjects(projects, activeTab);
 
   return (
     <>
@@ -37,7 +37,7 @@ export default function HomeClient() {
             borderRadius: 999, padding: '6px 14px', marginBottom: 22,
             fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--acc)',
           }}>
-            🏡 13 Projects · Panipat & NCR
+            🏡 {projects.length || 13} Projects · Panipat & NCR
           </div>
 
           <h1 style={{
@@ -86,7 +86,7 @@ export default function HomeClient() {
               Projects
             </h2>
             <Link href="/projects" style={{ fontSize: 13, fontWeight: 700, color: 'var(--acc)', textDecoration: 'none' }}>
-              View All Projects ({PROJECTS.length}) →
+              View All Projects ({projects.length}) →
             </Link>
           </div>
 

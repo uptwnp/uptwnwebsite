@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomeClient from '@/components/HomeClient';
+import { getProjects } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Home - #1 Real Estate Consultant in Panipat',
@@ -31,6 +32,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  return <HomeClient />;
+export default async function HomePage() {
+  const projects = await getProjects();
+  return <HomeClient projects={projects} />;
 }
+

@@ -74,29 +74,42 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'RealEstateAgent',
-  name: 'Uptown Property',
-  image: 'https://uptownproperty.in/uptown-logo-with-slogan.png',
-  '@id': 'https://uptownproperty.in/#organization',
-  url: 'https://uptownproperty.in',
-  telephone: '+919518091945',
-  priceRange: '₹₹–₹₹₹₹',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Panipat',
-    addressRegion: 'Haryana',
-    addressCountry: 'IN',
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateAgent',
+    name: 'Uptown Property',
+    image: 'https://uptownproperty.in/uptown-logo-with-slogan.png',
+    '@id': 'https://uptownproperty.in/#organization',
+    url: 'https://uptownproperty.in',
+    telephone: '+919518091945',
+    priceRange: '₹₹–₹₹₹₹',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Panipat',
+      addressRegion: 'Haryana',
+      addressCountry: 'IN',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 29.3909,
+      longitude: 76.9635,
+    },
+    areaServed: ['Panipat', 'Haryana', 'NCR'],
+    sameAs: ['https://wa.me/919518091945'],
   },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: 29.3909,
-    longitude: 76.9635,
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Uptown Property',
+    url: 'https://uptownproperty.in',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://uptownproperty.in/projects?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
   },
-  areaServed: ['Panipat', 'Haryana', 'NCR'],
-  sameAs: ['https://wa.me/919518091945'],
-};
+];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -122,6 +135,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

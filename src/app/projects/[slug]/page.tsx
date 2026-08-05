@@ -87,22 +87,49 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'RealEstateListing',
-    name: project.title,
-    description: project.description,
-    url: `https://uptownproperty.in/projects/${project.slug}`,
-    offers: {
-      '@type': 'Offer',
-      price: project.price,
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-    },
-    itemOffered: {
-      '@type': 'Product',
-      name: project.title,
-      description: project.description,
-      category: project.segment,
-    },
+    '@graph': [
+      {
+        '@type': 'RealEstateListing',
+        name: project.title,
+        description: project.description,
+        url: `https://uptownproperty.in/projects/${project.slug}`,
+        offers: {
+          '@type': 'Offer',
+          price: project.price,
+          priceCurrency: 'INR',
+          availability: 'https://schema.org/InStock',
+        },
+        itemOffered: {
+          '@type': 'Product',
+          name: project.title,
+          description: project.description,
+          category: project.segment,
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://uptownproperty.in',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Projects',
+            item: 'https://uptownproperty.in/projects',
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: project.title,
+            item: `https://uptownproperty.in/projects/${project.slug}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (
