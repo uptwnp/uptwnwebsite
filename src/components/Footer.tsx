@@ -21,20 +21,20 @@ export default function Footer({ mobilePad = false }: { mobilePad?: boolean }) {
           fontSize: 13,
           color: 'var(--muted)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--ink)', fontWeight: 700 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, color: 'var(--ink)', fontWeight: 700 }}>
             <svg
-              width="13"
-              height="18"
+              width="14"
+              height="20"
               viewBox="0 0 549 796"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              style={{ height: 18, width: 'auto', flexShrink: 0, display: 'block' }}
+              style={{ height: 20, width: 'auto', flexShrink: 0, display: 'block' }}
             >
               <path d="M365.484 795.462V451.479L548.225 580.472V795.462H453.307H365.484Z" fill="#FFAD35" />
               <path d="M0 279.486L354.733 0V440.728L182.741 580.472V795.461H0V279.486Z" fill="var(--ink)" />
             </svg>
-            <span style={{ lineHeight: 1, display: 'inline-flex', alignItems: 'center' }}>UPTOWN PROPERTY</span>
-            <span style={{ color: 'var(--faint)', fontWeight: 400 }}>· Panipat &amp; NCR</span>
+            <span style={{ lineHeight: 1, paddingBottom: 1 }}>UPTOWN PROPERTY</span>
+            <span style={{ color: 'var(--faint)', fontWeight: 400, paddingBottom: 1 }}>· Panipat &amp; NCR</span>
           </div>
 
           <nav style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 18px', fontSize: 13 }}>
