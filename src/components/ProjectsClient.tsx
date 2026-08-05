@@ -48,8 +48,8 @@ export default function ProjectsClient() {
   return (
     <>
       <Navbar />
-      <main style={{ background: 'var(--bg)', minHeight: '100vh', paddingBottom: 80 }}>
-        <div className="container" style={{ padding: '48px 16px' }}>
+      <main style={{ background: 'var(--bg)', minHeight: '100vh', paddingBottom: 80, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+        <div className="container" style={{ padding: '48px 16px', width: '100%', boxSizing: 'border-box' }}>
           
           {/* Breadcrumb */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--muted)', marginBottom: 16 }}>
@@ -67,7 +67,7 @@ export default function ProjectsClient() {
           </p>
 
           {/* Search & Filter Controls */}
-          <div style={{
+          <div className="search-filter-box" style={{
             background: 'var(--card)',
             border: '1px solid var(--border)',
             borderRadius: 20,
@@ -77,16 +77,20 @@ export default function ProjectsClient() {
             gap: 16,
             boxShadow: '0 4px 20px var(--shadow)',
             marginBottom: 32,
+            width: '100%',
+            maxWidth: '100%',
+            boxSizing: 'border-box',
+            overflow: 'hidden',
           }}>
             {/* Search Bar */}
-            <div style={{ position: 'relative', width: '100%' }}>
+            <div style={{ position: 'relative', width: '100%', minWidth: 0 }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
                 <circle cx="11" cy="11" r="8"/>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
               <input
                 type="text"
-                placeholder="Search by project name, location (e.g. Sector 36, GT Road)..."
+                placeholder="Search project name, location (e.g. GT Road)..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 style={{
@@ -98,6 +102,7 @@ export default function ProjectsClient() {
                   color: 'var(--ink)',
                   fontSize: 14,
                   outline: 'none',
+                  boxSizing: 'border-box',
                   transition: 'border-color 0.15s',
                 }}
                 onFocus={e => e.currentTarget.style.borderColor = 'var(--gold)'}
@@ -126,8 +131,19 @@ export default function ProjectsClient() {
               gap: 12,
               paddingTop: 12,
               borderTop: '1px solid var(--divider)',
+              width: '100%',
+              minWidth: 0,
+              maxWidth: '100%',
             }}>
-              <div className="scrollbar-none" style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
+              <div className="scrollbar-none" style={{
+                display: 'flex',
+                gap: 8,
+                overflowX: 'auto',
+                paddingBottom: 4,
+                width: '100%',
+                minWidth: 0,
+                maxWidth: '100%',
+              }}>
                 {TYPE_TABS.map(tab => {
                   const active = tab === selectedType;
                   return (
@@ -176,6 +192,8 @@ export default function ProjectsClient() {
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
               gap: 16,
+              width: '100%',
+              boxSizing: 'border-box',
             }} className="projects-listing-grid">
               {filteredProjects.map(project => (
                 <ProjectCard key={project.slug} project={project} />
@@ -190,6 +208,8 @@ export default function ProjectsClient() {
               border: '1px dashed var(--outline)',
               borderRadius: 24,
               margin: '20px 0',
+              width: '100%',
+              boxSizing: 'border-box',
             }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
               <h3 style={{ fontFamily: 'Archivo, sans-serif', fontSize: 20, margin: '0 0 8px', color: 'var(--ink)' }}>
@@ -215,12 +235,26 @@ export default function ProjectsClient() {
       </main>
 
       <style>{`
-        @media (max-width: 820px) {
+        .projects-listing-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+          width: 100%;
+        }
+
+        @media (max-width: 768px) {
+          .search-filter-box {
+            padding: 16px 14px !important;
+            border-radius: 16px !important;
+            margin-bottom: 20px !important;
+          }
           .projects-listing-grid {
             grid-template-columns: 1fr !important;
+            gap: 14px !important;
           }
         }
-        @media (min-width: 821px) and (max-width: 1100px) {
+
+        @media (min-width: 769px) and (max-width: 1024px) {
           .projects-listing-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
@@ -231,3 +265,5 @@ export default function ProjectsClient() {
     </>
   );
 }
+
+
