@@ -15,64 +15,206 @@ function getGalleryImages(slug: string): string[] {
 
 export default function PhotoGallery({ project }: Props) {
   const [docModal, setDocModal] = useState<'brochure' | 'layout' | null>(null);
-  const images = getGalleryImages(project.slug);
-  const colors = ['#E8DDD0', '#DDD4C8', '#D4C9BA', '#CCC0AE'];
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
+  const realImages = (project.images || []).filter(url => !url.toLowerCase().endsWith('.pdf'));
+  const colors = ['#E8DDD0', '#DDD4C8', '#D4C9BA', '#CCC0AE'];
   const waUrl = `https://wa.me/919518091945?text=${encodeURIComponent('Please share photos of ' + project.title)}`;
 
   return (
     <>
+      {/* Lightbox Modal for full screen view */}
+      {lightboxIdx !== null && realImages.length > 0 && (
+        <div
+          onClick={() => setLightboxIdx(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(0,0,0,0.92)', display: 'flex',
+            flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'center', padding: 16,
+            backdropFilter: 'blur(8px)',
+          }}
+        >
+          <div style={{
+            position: 'absolute', top: 20, right: 20,
+            display: 'flex', gap: 12, zIndex: 1001,
+          }}>
+            <a
+              href={realImages[lightboxIdx]}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              style={{
+                background: 'var(--gold)', color: '#15130F',
+                padding: '8px 18px', borderRadius: 999,
+                fontWeight: 700, fontSize: 13, textDecoration: 'none',
+              }}
+            >
+              Download Photo
+            </a>
+            <button
+              onClick={() => setLightboxIdx(null)}
+              style={{
+                width: 36, height: 36, borderRadius: '50%',
+                background: 'rgba(255,255,255,0.15)', color: '#fff',
+                border: 'none', fontSize: 18, cursor: 'pointer',
+              }}
+            >✕</button>
+          </div>
+
+          <img
+            src={realImages[lightboxIdx]}
+            alt={`${project.title} site photo ${lightboxIdx + 1}`}
+            onClick={e => e.stopPropagation()}
+            style={{
+              maxWidth: '90vw', maxHeight: '80vh',
+              objectFit: 'contain', borderRadius: 12,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+            }}
+          />
+
+          {realImages.length > 1 && (
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{ display: 'flex', gap: 10, marginTop: 20, overflowX: 'auto', maxWidth: '90vw', padding: '4px 0' }}
+            >
+              {realImages.map((imgUrl, i) => (
+                <button
+                  key={i}
+                  onClick={() => setLightboxIdx(i)}
+                  style={{
+                    width: 60, height: 44, borderRadius: 8, overflow: 'hidden',
+                    border: `2px solid ${i === lightboxIdx ? 'var(--gold)' : 'rgba(255,255,255,0.2)'}`,
+                    padding: 0, background: '#000', cursor: 'pointer', flexShrink: 0,
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imgUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Photo Grid */}
       <div className="photo-gallery-grid">
         {/* Main Hero Tile */}
-        <div
-          className="photo-tile photo-tile-main"
-          style={{ background: colors[0] }}
-        >
-          <div className="main-tile-content">
-            <div className="camera-icon-wrapper">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15130F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="#15130F" strokeWidth="2" />
-              </svg>
+        {realImages.length > 0 ? (
+          <div
+            className="photo-tile photo-tile-main"
+            onClick={() => setLightboxIdx(0)}
+            style={{ cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={realImages[0]}
+              alt={`${project.title} site photo`}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s' }}
+            />
+            <div style={{
+              position: 'absolute', bottom: 12, left: 12,
+              background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)',
+              color: '#fff', fontSize: 12, fontWeight: 700,
+              padding: '6px 14px', borderRadius: 999,
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              📷 View Site Photos ({realImages.length})
             </div>
-            <div>
-              <div className="main-tile-title">
-                Photo Not Available
+          </div>
+        ) : (
+          <div
+            className="photo-tile photo-tile-main"
+            style={{ background: colors[0] }}
+          >
+            <div className="main-tile-content">
+              <div className="camera-icon-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15130F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <line x1="1" y1="1" x2="23" y2="23" stroke="#15130F" strokeWidth="2" />
+                </svg>
               </div>
-              <div className="main-tile-sub">
-                Request site photos &amp; walkthrough below
+              <div>
+                <div className="main-tile-title">
+                  Photo Not Available
+                </div>
+                <div className="main-tile-sub">
+                  Request site photos &amp; walkthrough below
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Small Tile 1 (Visible on Mobile & Desktop) */}
-        <div className="photo-tile photo-tile-sub" style={{ background: colors[1] }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.35 }}>
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="#15130F" strokeWidth="1.5" />
-            <circle cx="8.5" cy="8.5" r="1.5" fill="#15130F" />
-            <path d="M21 15l-5-5L5 21" stroke="#15130F" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </div>
+        {/* Small Tile 1 */}
+        {realImages.length > 1 ? (
+          <div
+            className="photo-tile photo-tile-sub"
+            onClick={() => setLightboxIdx(1)}
+            style={{ cursor: 'pointer', overflow: 'hidden' }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={realImages[1]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+        ) : (
+          <div className="photo-tile photo-tile-sub" style={{ background: colors[1] }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.35 }}>
+              <rect x="3" y="3" width="18" height="18" rx="3" stroke="#15130F" strokeWidth="1.5" />
+              <circle cx="8.5" cy="8.5" r="1.5" fill="#15130F" />
+              <path d="M21 15l-5-5L5 21" stroke="#15130F" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </div>
+        )}
 
-        {/* Small Tile 2 (Desktop Only) */}
-        <div className="photo-tile photo-tile-sub photo-tile-mobile-hide" style={{ background: colors[2] }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.35 }}>
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="#15130F" strokeWidth="1.5" />
-            <circle cx="8.5" cy="8.5" r="1.5" fill="#15130F" />
-            <path d="M21 15l-5-5L5 21" stroke="#15130F" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </div>
+        {/* Small Tile 2 (Desktop) */}
+        {realImages.length > 2 ? (
+          <div
+            className="photo-tile photo-tile-sub photo-tile-mobile-hide"
+            onClick={() => setLightboxIdx(2)}
+            style={{ cursor: 'pointer', overflow: 'hidden' }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={realImages[2]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+        ) : (
+          <div className="photo-tile photo-tile-sub photo-tile-mobile-hide" style={{ background: colors[2] }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.35 }}>
+              <rect x="3" y="3" width="18" height="18" rx="3" stroke="#15130F" strokeWidth="1.5" />
+              <circle cx="8.5" cy="8.5" r="1.5" fill="#15130F" />
+              <path d="M21 15l-5-5L5 21" stroke="#15130F" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </div>
+        )}
 
-        {/* Small Tile 3 (Desktop Only) */}
-        <div className="photo-tile photo-tile-sub photo-tile-mobile-hide" style={{ background: colors[3] }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.35 }}>
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="#15130F" strokeWidth="1.5" />
-            <circle cx="8.5" cy="8.5" r="1.5" fill="#15130F" />
-            <path d="M21 15l-5-5L5 21" stroke="#15130F" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </div>
+        {/* Small Tile 3 (Desktop) */}
+        {realImages.length > 3 ? (
+          <div
+            className="photo-tile photo-tile-sub photo-tile-mobile-hide"
+            onClick={() => setLightboxIdx(3)}
+            style={{ cursor: 'pointer', overflow: 'hidden', position: 'relative' }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={realImages[3]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {realImages.length > 4 && (
+              <div style={{
+                position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)',
+                color: '#fff', fontSize: 16, fontWeight: 800,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                +{realImages.length - 4} More
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="photo-tile photo-tile-sub photo-tile-mobile-hide" style={{ background: colors[3] }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.35 }}>
+              <rect x="3" y="3" width="18" height="18" rx="3" stroke="#15130F" strokeWidth="1.5" />
+              <circle cx="8.5" cy="8.5" r="1.5" fill="#15130F" />
+              <path d="M21 15l-5-5L5 21" stroke="#15130F" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </div>
+        )}
 
         {/* WhatsApp Request Tile (Visible on Mobile & Desktop) */}
         <a

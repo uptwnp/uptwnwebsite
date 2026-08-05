@@ -32,6 +32,7 @@ export interface Project {
   mapUrl?: string;
   brochureUrl?: string;
   layoutUrl?: string;
+  images?: string[];
 }
 
 export function formatPrice(price: string): { main: string; onwards: string } {

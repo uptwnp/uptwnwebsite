@@ -109,7 +109,25 @@ export const getProjectBySlug = cache(async (slug: string): Promise<Project | nu
     if (error || !data) {
       return null;
     }
-    return rowToProject(data as ProjectRow);
+    const project = rowToProject(data as ProjectRow);
+
+    // Also look up matching layout images from layouts table
+    const { data: layoutData } = await supabase
+      .from('layouts')
+      .select('images, image_url')
+      .or(`project_slug.eq.${slug},id.eq.${slug}-layout`)
+      .limit(1)
+      .maybeSingle();
+
+    if (layoutData?.images && Array.isArray(layoutData.images) && layoutData.images.length > 0) {
+      project.images = layoutData.images
+        .map((im: any) => typeof im === 'string' ? im : im?.url)
+        .filter((url: string | undefined): url is string => Boolean(url));
+    } else if (layoutData?.image_url) {
+      project.images = [layoutData.image_url];
+    }
+
+    return project;
   } catch {
     return null;
   }
