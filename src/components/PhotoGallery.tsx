@@ -100,7 +100,8 @@ export default function PhotoGallery({ project }: Props) {
           className="gallery-action-btn"
         >
           <span className="btn-icon">↓</span>
-          <span>Get Brochure</span>
+          <span className="btn-text-full">Get Brochure</span>
+          <span className="btn-text-short">Brochure</span>
         </button>
         <button
           type="button"
@@ -108,7 +109,8 @@ export default function PhotoGallery({ project }: Props) {
           className="gallery-action-btn"
         >
           <span className="btn-icon">↓</span>
-          <span>Get Layout</span>
+          <span className="btn-text-full">Get Layout</span>
+          <span className="btn-text-short">Layout</span>
         </button>
         <ShareButton title={project.title} />
       </div>
@@ -229,41 +231,52 @@ export default function PhotoGallery({ project }: Props) {
           color: var(--ink);
         }
 
-        /* Action Buttons - Single Row on Mobile */
+        /* Action Buttons - 100% Uniform & Consistent */
         .gallery-actions {
           display: flex;
           flex-wrap: nowrap;
-          gap: 6px;
+          gap: 8px;
           margin-top: 12px;
         }
 
         .gallery-action-btn, .gallery-share-btn {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 4px;
+          gap: 6px;
           background: var(--card);
           border: 1px solid var(--border);
-          border-radius: 10px;
-          padding: 10px 6px;
+          border-radius: 12px;
+          height: 42px;
+          padding: 0 8px;
           cursor: pointer;
           color: var(--ink);
           font-weight: 700;
-          font-size: 12px;
+          font-size: 13px;
           white-space: nowrap;
-          transition: border-color 0.15s;
+          transition: all 0.15s ease;
           flex: 1 1 0px;
           min-width: 0;
+          box-sizing: border-border;
         }
 
         .gallery-action-btn:hover, .gallery-share-btn:hover {
           border-color: var(--gold);
+          background: var(--band);
         }
 
         .btn-icon {
-          font-size: 13px;
+          font-size: 14px;
           color: var(--acc);
           flex-shrink: 0;
+        }
+
+        .btn-text-short {
+          display: inline;
+        }
+
+        .btn-text-full {
+          display: none;
         }
 
         /* Desktop Layout (768px and up) */
@@ -302,21 +315,26 @@ export default function PhotoGallery({ project }: Props) {
           }
 
           .gallery-actions {
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
           }
 
           .gallery-action-btn, .gallery-share-btn {
-            flex: initial;
-            padding: 12px 16px;
+            height: 46px;
             font-size: 14px;
-            border-radius: 12px;
+            padding: 0 18px;
             gap: 8px;
-            justify-content: flex-start;
           }
 
           .btn-icon {
             font-size: 15px;
+          }
+
+          .btn-text-short {
+            display: none;
+          }
+
+          .btn-text-full {
+            display: inline;
           }
         }
       `}</style>

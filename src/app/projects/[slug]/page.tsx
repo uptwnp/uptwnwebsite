@@ -74,12 +74,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const forms = project.form.split(/\s*(?:&|\/|,)\s*/).filter(Boolean);
 
   const KEY_FACTS = [
-    { label: 'Segment', value: project.segment },
-    { label: 'Price', value: `${priceMain}${onwards ? ' ' + onwards : ''}` },
-    { label: 'Unit Size', value: project.area },
-    { label: 'Units', value: project.units },
-    { label: 'Possession', value: project.possession },
-    { label: 'Total Area', value: project.total },
+    { label: 'Segment', value: project.segment || 'N/A' },
+    { label: 'Price', value: priceMain ? `${priceMain}${onwards ? ' ' + onwards : ''}` : 'N/A' },
+    { label: 'Unit Size', value: project.area || 'N/A' },
+    { label: 'Units', value: project.units || 'N/A' },
+    { label: 'Possession', value: project.possession || 'N/A' },
+    { label: 'Total Area', value: project.total || 'N/A' },
   ];
 
   const jsonLd = {
@@ -283,7 +283,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                         gap: 16,
                       }}>
                         <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 600 }}>{k}</span>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', textAlign: 'right' }}>{v}</span>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', textAlign: 'right' }}>{v || 'N/A'}</span>
                       </div>
                     ))}
                   </div>
