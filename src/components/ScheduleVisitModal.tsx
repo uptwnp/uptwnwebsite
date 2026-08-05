@@ -30,10 +30,26 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
     onClose();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     saveUserDetails({ name, phone });
     setSubmitted(true);
+
+    try {
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          phone,
+          projectTitle,
+          formType: 'schedule_visit',
+          note: note || null,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to submit lead to Supabase API:', err);
+    }
   };
 
   const msg = `Hi Uptown Property, I would like to schedule a site visit for *${projectTitle}*.\n\n👤 *Name:* ${name || 'Not provided'}\n📞 *Phone:* ${phone || 'Not provided'}\n🗓️ *Note/Preferred Time:* ${note || 'As per availability'}`;

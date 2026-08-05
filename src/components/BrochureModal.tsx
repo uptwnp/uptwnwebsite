@@ -33,12 +33,28 @@ export default function BrochureModal({ projectTitle, type, isOpen, onClose, pdf
     onClose();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     saveUserDetails({ name, phone });
     setSubmitted(true);
+
     if (pdfUrl) {
       window.open(pdfUrl, '_blank');
+    }
+
+    try {
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          phone,
+          projectTitle,
+          formType: type,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to submit lead to Supabase API:', err);
     }
   };
 
