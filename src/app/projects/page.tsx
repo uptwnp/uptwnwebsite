@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import ProjectsClient from '@/components/ProjectsClient';
 import { getProjects } from '@/lib/supabase';
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: 'Real Estate Projects & Townships in Panipat',
   description: 'Browse all 13+ live real estate projects in Panipat. Filter by plots, builder floors, luxury flats, and industrial parks.',

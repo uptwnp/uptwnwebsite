@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import HomeClient from '@/components/HomeClient';
 import { getProjects } from '@/lib/supabase';
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: 'Home - #1 Real Estate Consultant in Panipat',
   description: 'Explore 13+ live residential, commercial & industrial projects in Panipat. Plots, builder floors, villas, and industrial land. 10+ years trusted real estate advisory.',

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import LayoutsClient from '@/components/LayoutsClient';
 import { getLayouts } from '@/lib/supabase';
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: 'Project Layout Plans in Panipat',
   description: 'Download master layout plans for all real estate projects in Panipat. Browse plot layouts, township maps, and industrial park plans for free.',
