@@ -73,7 +73,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const { main: priceMain, onwards } = formatPrice(project.price);
   const mapUrl = project.mapUrl || `https://maps.google.com/?q=${encodeURIComponent(project.title + ', ' + project.location)}`;
   const wa = `https://wa.me/919518091945?text=${encodeURIComponent('Hi, I want details about ' + project.title)}`;
-  const waVisit = `https://wa.me/919518091945?text=${encodeURIComponent('I want to schedule a site visit for ' + project.title)}`;
   const forms = project.form.split(/\s*(?:&|\/|,)\s*/).filter(Boolean);
 
   const KEY_FACTS = [
@@ -139,10 +138,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main style={{ background: 'var(--bg)', minHeight: '100vh' }}>
+      <main className="project-main" style={{ background: 'var(--bg)', minHeight: '100vh' }}>
         <div className="container" style={{ padding: '0 16px 64px' }}>
           {/* Two-column desktop grid */}
-          <div style={{
+          <div className="project-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 2fr) 320px',
             gap: 40,
@@ -428,15 +427,22 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <style>{`
         @media (max-width: 820px) {
-          .container > div[style*="grid-template-columns"] {
+          .project-grid {
             grid-template-columns: 1fr !important;
           }
-          div[style*="320px"] { display: none; }
+          /* The sticky price/CTA card is replaced by the fixed bottom bar on
+             mobile — showing both duplicated the same two actions. */
+          .project-sidebar { display: none !important; }
           .mobile-bar {
             display: block;
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
             background: var(--hdr); backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-top: 1px solid var(--border);
+          }
+          /* Reserve room so the fixed bar never covers the end of the footer. */
+          .project-main {
+            padding-bottom: calc(76px + env(safe-area-inset-bottom));
           }
           .related-projects-grid {
             grid-template-columns: 1fr !important;

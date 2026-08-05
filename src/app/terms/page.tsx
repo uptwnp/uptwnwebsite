@@ -104,7 +104,7 @@ export default function TermsPage() {
                 5. Limitation of Liability
               </h2>
               <p style={{ margin: 0 }}>
-                Uptown Property shall not be held liable for any construction delays, developer defaults, or third-party disputes arising post-booking. We assist end-to-end in paperwork and mediation to safeguard our clients' interests.
+                Uptown Property shall not be held liable for any construction delays, developer defaults, or third-party disputes arising post-booking. We assist end-to-end in paperwork and mediation to safeguard our clients&apos; interests.
               </p>
             </div>
 

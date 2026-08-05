@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import type { LayoutItem, LayoutImage } from '@/data/layouts';
+import PdfPreviewCard from '@/components/PdfPreviewCard';
+import { useIsMobile, useBodyScrollLock } from '@/utils/hooks';
 
 /* ─── Helpers ─── */
 function isPdf(url: string) {
@@ -22,6 +24,7 @@ function ImageViewer({
   onClose: () => void;
 }) {
   const [current, setCurrent] = useState(startIndex);
+  const isMobile = useIsMobile();
 
   const prev = useCallback(() => setCurrent(i => Math.max(0, i - 1)), []);
   const next = useCallback(() => setCurrent(i => Math.min(images.length - 1, i + 1)), [images.length]);
@@ -36,10 +39,7 @@ function ImageViewer({
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose, prev, next]);
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
+  useBodyScrollLock(true);
 
   const img = images[current];
   const pdf = isPdf(img.url);
@@ -68,9 +68,9 @@ function ImageViewer({
       <div style={{
         width: '100%', maxWidth: 1100, display: 'flex',
         alignItems: 'center', justifyContent: 'space-between',
-        marginBottom: 14, flexShrink: 0, gap: 12,
+        marginBottom: 14, flexShrink: 0, gap: 12, flexWrap: 'wrap',
       }}>
-        <div>
+        <div style={{ minWidth: 0, flex: '1 1 140px' }}>
           <div style={{ color: '#fff', fontWeight: 700, fontSize: 16, fontFamily: 'Archivo, sans-serif' }}>
             {projectTitle}
           </div>
@@ -135,14 +135,23 @@ function ImageViewer({
         )}
 
         {pdf ? (
-          <iframe
-            src={`${img.url}#toolbar=0&navpanes=0`}
-            title={`${projectTitle} PDF Viewer`}
-            style={{
-              width: '100%', height: '75vh', background: '#ffffff', borderRadius: 14,
-              border: 'none', animation: 'alyScale 0.2s ease',
-            }}
-          />
+          isMobile ? (
+            <div style={{
+              width: '100%', maxWidth: 460, borderRadius: 16, overflow: 'hidden',
+              animation: 'alyScale 0.2s ease',
+            }}>
+              <PdfPreviewCard url={img.url} title={projectTitle} label={img.label} />
+            </div>
+          ) : (
+            <iframe
+              src={`${img.url}#toolbar=0&navpanes=0`}
+              title={`${projectTitle} PDF Viewer`}
+              style={{
+                width: '100%', height: '75vh', background: '#ffffff', borderRadius: 14,
+                border: 'none', animation: 'alyScale 0.2s ease',
+              }}
+            />
+          )
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -209,11 +218,13 @@ function LayoutPreviewCard({
   onView: (imgIndex: number) => void;
 }) {
   const mainIsPdf = isPdf(layout.imageUrl);
-  const [isMediaLoading, setIsMediaLoading] = useState(true);
-
-  useEffect(() => {
-    setIsMediaLoading(true);
-  }, [layout.imageUrl]);
+  const isMobile = useIsMobile();
+  // Mobile PDFs render as a static card, so there is nothing to wait for.
+  const showAsPdfCard = mainIsPdf && isMobile;
+  // Tracking the settled URL instead of a boolean keeps the spinner in sync when
+  // the media changes, without a setState-in-effect round trip.
+  const [settledUrl, setSettledUrl] = useState<string | null>(null);
+  const isMediaLoading = !showAsPdfCard && settledUrl !== layout.imageUrl;
 
   return (
     <div
@@ -308,13 +319,14 @@ function LayoutPreviewCard({
 
       {/* Main Full-Width Preview Area */}
       <div
-        className="preview-box"
+        className={showAsPdfCard ? undefined : 'preview-box'}
         style={{
           width: '100%',
-          background: mainIsPdf ? '#f8f9fa' : 'var(--band)', position: 'relative',
+          background: showAsPdfCard ? 'var(--card)' : mainIsPdf ? '#f8f9fa' : 'var(--band)',
+          position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           overflow: 'hidden',
-          minHeight: mainIsPdf ? 540 : undefined,
+          minHeight: !showAsPdfCard && mainIsPdf ? 540 : undefined,
         }}
       >
         {isMediaLoading && (
@@ -343,11 +355,13 @@ function LayoutPreviewCard({
           </div>
         )}
 
-        {mainIsPdf ? (
+        {showAsPdfCard ? (
+          <PdfPreviewCard url={layout.imageUrl} title={layout.projectTitle} compact />
+        ) : mainIsPdf ? (
           <iframe
             src={`${layout.imageUrl}#toolbar=0&navpanes=0&view=FitH`}
             title={`${layout.projectTitle} Layout`}
-            onLoad={() => setIsMediaLoading(false)}
+            onLoad={() => setSettledUrl(layout.imageUrl)}
             style={{
               width: '100%',
               height: '100%',
@@ -361,7 +375,8 @@ function LayoutPreviewCard({
           <img
             src={layout.imageUrl}
             alt={`${layout.projectTitle} layout preview`}
-            onLoad={() => setIsMediaLoading(false)}
+            onLoad={() => setSettledUrl(layout.imageUrl)}
+            onError={() => setSettledUrl(layout.imageUrl)}
             onClick={() => onView(0)}
             style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'var(--band)', display: 'block', cursor: 'pointer' }}
           />
@@ -392,8 +407,8 @@ function LayoutPreviewCard({
           </div>
         )}
 
-        {/* Fullscreen button for PDF */}
-        {mainIsPdf && (
+        {/* Fullscreen button for PDF — the mobile card carries its own actions */}
+        {mainIsPdf && !showAsPdfCard && (
           <button
             onClick={() => onView(0)}
             title="Expand Full Screen"
@@ -454,7 +469,6 @@ function LayoutPreviewCard({
 export default function AreaLayoutClient({
   layouts,
   city,
-  area,
   cityLabel,
   areaLabel,
 }: {
@@ -465,6 +479,7 @@ export default function AreaLayoutClient({
   areaLabel: string;
 }) {
   const [viewer, setViewer] = useState<{ layoutIdx: number; imgIdx: number } | null>(null);
+  const isMobile = useIsMobile();
 
   /* Auto-scroll to target hash if provided in URL */
   useEffect(() => {
@@ -477,22 +492,22 @@ export default function AreaLayoutClient({
     }
   }, []);
 
-  /* Download all for this area */
+  const allImages = layouts.flatMap(l => l.images);
+
+  /* Download all for this area.
+     Every click has to fire inside the original user gesture — anything moved
+     into a setTimeout loses user activation and gets blocked by the browser
+     (all but the first file, and on iOS often all of them). */
   const downloadAll = () => {
-    layouts.forEach((layout, li) => {
-      layout.images.forEach((img, ii) => {
-        setTimeout(() => {
-          const a = document.createElement('a');
-          a.href = img.url;
-          a.download = '';
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }, (li * layout.images.length + ii) * 450);
-      });
-    });
+    for (const img of allImages) {
+      const a = document.createElement('a');
+      a.href = img.url;
+      a.download = '';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
   };
 
   const openViewer = (layoutIdx: number, imgIdx: number) =>
@@ -572,27 +587,50 @@ export default function AreaLayoutClient({
 
               {/* All Top Action Buttons */}
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }} className="area-hero-actions">
-                <button
-                  id="area-download-all-btn"
-                  onClick={downloadAll}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 8,
-                    background: 'var(--gold)', color: '#15130F',
-                    fontWeight: 700, fontSize: 14,
-                    padding: '12px 24px', borderRadius: 999,
-                    border: 'none', cursor: 'pointer',
-                    transition: 'opacity 0.15s',
-                  }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
-                  Download All ({layouts.reduce((s, l) => s + l.images.length, 0)})
-                </button>
+                {/* Batch download only works where the browser tolerates several
+                    downloads from one gesture. Mobile blocks all but the first,
+                    so it gets a jump link to the per-layout download buttons. */}
+                {isMobile ? (
+                  <a
+                    href={`#${layouts[0].id}`}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                      background: 'var(--gold)', color: '#15130F',
+                      fontWeight: 700, fontSize: 14,
+                      padding: '12px 24px', borderRadius: 999,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    View &amp; Download ({allImages.length})
+                  </a>
+                ) : (
+                  <button
+                    id="area-download-all-btn"
+                    onClick={downloadAll}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 8,
+                      background: 'var(--gold)', color: '#15130F',
+                      fontWeight: 700, fontSize: 14,
+                      padding: '12px 24px', borderRadius: 999,
+                      border: 'none', cursor: 'pointer',
+                      transition: 'opacity 0.15s',
+                    }}
+                    onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.85')}
+                    onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download All ({allImages.length})
+                  </button>
+                )}
 
                 {firstProjectSlug && (
                   <Link

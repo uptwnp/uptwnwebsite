@@ -55,9 +55,29 @@ html, body {
 body {
   font-family: 'Manrope', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   transition: background-color 0.25s ease, color 0.25s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Native controls (scrollbars, date pickers, autofill) follow the active theme */
+:root { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+
+/* ─── Forms ───
+   iOS Safari zooms the page whenever a focused field is under 16px and never
+   zooms back out, so every control has to stay at 16px on small screens. */
+input, textarea, select, button {
+  font-family: inherit;
+}
+input, textarea, select {
+  font-size: 16px;
+}
+@media (min-width: 821px) {
+  input, textarea, select {
+    font-size: 14px;
+  }
 }
 
 /* ─── Typography ─── */
@@ -71,6 +91,46 @@ a {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px;
+}
+
+/* ─── Modal overlay ───
+   The overlay scrolls, not the card, so a tall form (or a short viewport with
+   the on-screen keyboard open) can never trap the submit / close buttons. */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(10, 10, 10, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  position: relative;
+  margin: auto;
+  max-height: none;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .modal-card {
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
 }
 
 /* ─── Scrollbar ─── */

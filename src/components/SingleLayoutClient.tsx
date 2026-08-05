@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import type { LayoutItem, LayoutImage } from '@/data/layouts';
+import PdfPreviewCard from '@/components/PdfPreviewCard';
+import { useIsMobile, useBodyScrollLock } from '@/utils/hooks';
 
 function isPdf(url: string) {
   return url.toLowerCase().includes('.pdf');
@@ -21,6 +23,7 @@ function ImageViewer({
   onClose: () => void;
 }) {
   const [current, setCurrent] = useState(startIndex);
+  const isMobile = useIsMobile();
 
   const prev = useCallback(() => setCurrent(i => Math.max(0, i - 1)), []);
   const next = useCallback(() => setCurrent(i => Math.min(images.length - 1, i + 1)), [images.length]);
@@ -35,10 +38,7 @@ function ImageViewer({
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose, prev, next]);
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
+  useBodyScrollLock(true);
 
   const img = images[current];
   const pdf = isPdf(img.url);
@@ -67,9 +67,9 @@ function ImageViewer({
       <div style={{
         width: '100%', maxWidth: 1100, display: 'flex',
         alignItems: 'center', justifyContent: 'space-between',
-        marginBottom: 14, flexShrink: 0, gap: 12,
+        marginBottom: 14, flexShrink: 0, gap: 12, flexWrap: 'wrap',
       }}>
-        <div>
+        <div style={{ minWidth: 0, flex: '1 1 140px' }}>
           <div style={{ color: '#fff', fontWeight: 700, fontSize: 16, fontFamily: 'Archivo, sans-serif' }}>
             {projectTitle}
           </div>
@@ -134,14 +134,23 @@ function ImageViewer({
         )}
 
         {pdf ? (
-          <iframe
-            src={`${img.url}#toolbar=0&navpanes=0`}
-            title={`${projectTitle} PDF Viewer`}
-            style={{
-              width: '100%', height: '78vh', background: '#ffffff', borderRadius: 14,
-              border: 'none', animation: 'slyScale 0.2s ease',
-            }}
-          />
+          isMobile ? (
+            <div style={{
+              width: '100%', maxWidth: 460, borderRadius: 16, overflow: 'hidden',
+              animation: 'slyScale 0.2s ease',
+            }}>
+              <PdfPreviewCard url={img.url} title={projectTitle} label={img.label} />
+            </div>
+          ) : (
+            <iframe
+              src={`${img.url}#toolbar=0&navpanes=0`}
+              title={`${projectTitle} PDF Viewer`}
+              style={{
+                width: '100%', height: '78vh', background: '#ffffff', borderRadius: 14,
+                border: 'none', animation: 'slyScale 0.2s ease',
+              }}
+            />
+          )
         ) : (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -257,14 +266,16 @@ export default function SingleLayoutClient({
 }) {
   const [selectedImgIdx, setSelectedImgIdx] = useState(0);
   const [showViewer, setShowViewer] = useState(false);
-  const [isMediaLoading, setIsMediaLoading] = useState(true);
+  // Tracking the settled URL instead of a boolean keeps the spinner in sync when
+  // the user switches media, without a setState-in-effect round trip.
+  const [settledUrl, setSettledUrl] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const currentMedia = layout.images[selectedImgIdx] ?? layout.images[0];
   const currentIsPdf = isPdf(currentMedia.url);
-
-  useEffect(() => {
-    setIsMediaLoading(true);
-  }, [currentMedia.url]);
+  // Mobile PDFs render as a static card, so there is nothing to wait for.
+  const showAsPdfCard = currentIsPdf && isMobile;
+  const isMediaLoading = !showAsPdfCard && settledUrl !== currentMedia.url;
 
   return (
     <>
@@ -392,8 +403,8 @@ export default function SingleLayoutClient({
           }}>
             <div style={{
               width: '100%', position: 'relative',
-              background: currentIsPdf ? '#f8f9fa' : 'var(--band)',
-              minHeight: currentIsPdf ? 620 : 450,
+              background: showAsPdfCard ? 'var(--card)' : currentIsPdf ? '#f8f9fa' : 'var(--band)',
+              minHeight: showAsPdfCard ? 0 : currentIsPdf ? 620 : 450,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               {isMediaLoading && (
@@ -422,11 +433,17 @@ export default function SingleLayoutClient({
                 </div>
               )}
 
-              {currentIsPdf ? (
+              {showAsPdfCard ? (
+                <PdfPreviewCard
+                  url={currentMedia.url}
+                  title={layout.projectTitle}
+                  label={currentMedia.label}
+                />
+              ) : currentIsPdf ? (
                 <iframe
                   src={`${currentMedia.url}#toolbar=0&navpanes=0&view=FitH`}
                   title={`${layout.projectTitle} Layout Viewer`}
-                  onLoad={() => setIsMediaLoading(false)}
+                  onLoad={() => setSettledUrl(currentMedia.url)}
                   style={{
                     width: '100%', height: '70vh', minHeight: '620px',
                     border: 'none', background: '#ffffff',
@@ -437,31 +454,34 @@ export default function SingleLayoutClient({
                 <img
                   src={currentMedia.url}
                   alt={`${layout.projectTitle} Layout Plan`}
-                  onLoad={() => setIsMediaLoading(false)}
+                  onLoad={() => setSettledUrl(currentMedia.url)}
+                  onError={() => setSettledUrl(currentMedia.url)}
                   onClick={() => setShowViewer(true)}
                   style={{ width: '100%', height: '100%', maxHeight: '75vh', objectFit: 'contain', cursor: 'pointer', display: 'block' }}
                 />
               )}
 
-              {/* Fullscreen Trigger Button */}
-              <button
-                onClick={() => setShowViewer(true)}
-                title="View Full Screen"
-                style={{
-                  position: 'absolute', top: 16, right: 16, zIndex: 3,
-                  background: 'rgba(0,0,0,0.75)', color: '#fff',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: 999, padding: '10px 18px',
-                  display: 'flex', alignItems: 'center', gap: 7,
-                  fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                  backdropFilter: 'blur(4px)', boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
-                }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
-                </svg>
-                Full Screen
-              </button>
+              {/* Fullscreen Trigger Button — the mobile PDF card carries its own actions */}
+              {!showAsPdfCard && (
+                <button
+                  onClick={() => setShowViewer(true)}
+                  title="View Full Screen"
+                  style={{
+                    position: 'absolute', top: 16, right: 16, zIndex: 3,
+                    background: 'rgba(0,0,0,0.75)', color: '#fff',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    borderRadius: 999, padding: '10px 18px',
+                    display: 'flex', alignItems: 'center', gap: 7,
+                    fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                    backdropFilter: 'blur(4px)', boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+                  </svg>
+                  Full Screen
+                </button>
+              )}
             </div>
 
             {/* Thumbnail selector strip if multiple images */}

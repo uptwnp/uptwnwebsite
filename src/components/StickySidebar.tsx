@@ -11,7 +11,7 @@ export default function StickySidebar({ project }: { project: Project }) {
 
   return (
     <>
-      <div style={{
+      <div className="project-sidebar" style={{
         background: 'var(--band)',
         border: '1px solid var(--border)',
         borderRadius: 20,

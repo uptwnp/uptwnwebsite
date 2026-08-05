@@ -116,7 +116,7 @@ export default function LayoutsClient({ layouts }: { layouts: LayoutItem[] }) {
       const matchesType = selectedType === 'All' || item.type === selectedType;
       return matchesSearch && matchesType;
     });
-  }, [searchQuery, selectedType]);
+  }, [layouts, searchQuery, selectedType]);
 
   const hasActiveFilters = searchQuery !== '' || selectedType !== 'All';
   const resetFilters = () => { setSearchQuery(''); setSelectedType('All'); };
@@ -167,7 +167,7 @@ export default function LayoutsClient({ layouts }: { layouts: LayoutItem[] }) {
                   width: '100%', padding: '12px 38px 12px 42px',
                   borderRadius: 12, border: '1px solid var(--border)',
                   background: 'var(--bg)', color: 'var(--ink)',
-                  fontSize: 14, outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
+                  outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
                 }}
                 onFocus={e => e.currentTarget.style.borderColor = 'var(--gold)'}
                 onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}

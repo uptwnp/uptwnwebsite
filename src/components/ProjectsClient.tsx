@@ -36,7 +36,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
 
       return matchesSearch && matchesType;
     });
-  }, [searchQuery, selectedType]);
+  }, [projects, searchQuery, selectedType]);
 
   const hasActiveFilters = searchQuery !== '' || selectedType !== 'All';
 
@@ -100,7 +100,6 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                   border: '1px solid var(--border)',
                   background: 'var(--bg)',
                   color: 'var(--ink)',
-                  fontSize: 14,
                   outline: 'none',
                   boxSizing: 'border-box',
                   transition: 'border-color 0.15s',

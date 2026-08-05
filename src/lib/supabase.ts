@@ -120,9 +120,9 @@ export const getProjectBySlug = cache(async (slug: string): Promise<Project | nu
       .maybeSingle();
 
     if (layoutData?.images && Array.isArray(layoutData.images) && layoutData.images.length > 0) {
-      project.images = layoutData.images
-        .map((im: any) => typeof im === 'string' ? im : im?.url)
-        .filter((url: string | undefined): url is string => Boolean(url));
+      project.images = (layoutData.images as (string | { url?: string })[])
+        .map(im => (typeof im === 'string' ? im : im?.url))
+        .filter((url): url is string => Boolean(url));
     } else if (layoutData?.image_url) {
       project.images = [layoutData.image_url];
     }

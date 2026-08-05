@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserDetails, saveUserDetails } from '@/utils/userStore';
+import { useBodyScrollLock } from '@/utils/hooks';
 
 interface Props {
   projectTitle: string;
@@ -10,25 +11,27 @@ interface Props {
 }
 
 export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Props) {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  useBodyScrollLock(isOpen);
+
+  if (!isOpen) return null;
+  // Remounts on every open, so saved details are read during the initial render
+  // instead of being pushed in from an effect.
+  return <ScheduleVisitForm projectTitle={projectTitle} onClose={onClose} />;
+}
+
+function ScheduleVisitForm({ projectTitle, onClose }: { projectTitle: string; onClose: () => void }) {
+  const [name, setName] = useState(() => getUserDetails().name);
+  const [phone, setPhone] = useState(() => getUserDetails().phone);
   const [note, setNote] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      const saved = getUserDetails();
-      if (saved.name) setName(saved.name);
-      if (saved.phone) setPhone(saved.phone);
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
     }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  const handleResetAndClose = () => {
-    setSubmitted(false);
-    onClose();
-  };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,36 +58,23 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
   const msg = `Hi Uptown Property, I would like to schedule a site visit for *${projectTitle}*.\n\n👤 *Name:* ${name || 'Not provided'}\n📞 *Phone:* ${phone || 'Not provided'}\n🗓️ *Note/Preferred Time:* ${note || 'As per availability'}`;
   const waUrl = `https://wa.me/919518091945?text=${encodeURIComponent(msg)}`;
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '12px 14px', borderRadius: 12,
+    border: '1px solid var(--border)', background: 'var(--bg)',
+    color: 'var(--ink)', outline: 'none', boxSizing: 'border-box',
+  };
+
   return (
-    <div
-      onClick={handleResetAndClose}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 999,
-        background: 'rgba(10,10,10,0.65)', backdropFilter: 'blur(6px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 16,
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: 'var(--card)',
-          border: '1px solid var(--border)',
-          borderRadius: 24,
-          padding: '28px 24px',
-          width: '100%',
-          maxWidth: 440,
-          boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
-          position: 'relative',
-        }}
-      >
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-card" onClick={e => e.stopPropagation()}>
         {/* Close Button */}
         <button
           type="button"
-          onClick={handleResetAndClose}
+          onClick={onClose}
+          aria-label="Close"
           style={{
             position: 'absolute', right: 18, top: 18,
-            width: 32, height: 32, borderRadius: '50%',
+            width: 36, height: 36, borderRadius: '50%',
             border: '1px solid var(--border)', background: 'var(--bg)',
             color: 'var(--muted)', cursor: 'pointer', fontSize: 16,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -99,7 +89,7 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--acc)' }}>
               Site Visit Request
             </span>
-            <h3 style={{ margin: '4px 0 6px', fontFamily: 'Archivo, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--ink)' }}>
+            <h3 style={{ margin: '4px 0 6px', fontFamily: 'Archivo, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--ink)', paddingRight: 40 }}>
               Schedule Visit
             </h3>
             <p style={{ margin: '0 0 20px', fontSize: 14, color: 'var(--muted)', lineHeight: 1.4 }}>
@@ -114,14 +104,11 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
                 <input
                   type="text"
                   required
+                  autoComplete="name"
                   placeholder="e.g. Rahul Sharma"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  style={{
-                    width: '100%', padding: '12px 14px', borderRadius: 12,
-                    border: '1px solid var(--border)', background: 'var(--bg)',
-                    color: 'var(--ink)', fontSize: 14, outline: 'none',
-                  }}
+                  style={inputStyle}
                 />
               </div>
 
@@ -132,14 +119,12 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
                 <input
                   type="tel"
                   required
+                  inputMode="tel"
+                  autoComplete="tel"
                   placeholder="e.g. 98765 43210"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  style={{
-                    width: '100%', padding: '12px 14px', borderRadius: 12,
-                    border: '1px solid var(--border)', background: 'var(--bg)',
-                    color: 'var(--ink)', fontSize: 14, outline: 'none',
-                  }}
+                  style={inputStyle}
                 />
               </div>
 
@@ -152,11 +137,7 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
                   placeholder="e.g. Tomorrow at 11 AM, interested in 200 sq yd plot"
                   value={note}
                   onChange={e => setNote(e.target.value)}
-                  style={{
-                    width: '100%', padding: '12px 14px', borderRadius: 12,
-                    border: '1px solid var(--border)', background: 'var(--bg)',
-                    color: 'var(--ink)', fontSize: 14, outline: 'none', resize: 'none',
-                  }}
+                  style={{ ...inputStyle, resize: 'none' }}
                 />
               </div>
 
@@ -208,7 +189,7 @@ export default function ScheduleVisitModal({ projectTitle, isOpen, onClose }: Pr
               </a>
               <button
                 type="button"
-                onClick={handleResetAndClose}
+                onClick={onClose}
                 style={{
                   background: 'transparent', border: '1px solid var(--border)',
                   color: 'var(--ink)', fontWeight: 600, fontSize: 14,

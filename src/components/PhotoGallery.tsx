@@ -8,11 +8,6 @@ interface Props {
   project: Project;
 }
 
-// Placeholder gallery images (colored SVG tiles)
-function getGalleryImages(slug: string): string[] {
-  return Array.from({ length: 4 }, (_, i) => `/api/placeholder/${slug}/${i}`);
-}
-
 export default function PhotoGallery({ project }: Props) {
   const [docModal, setDocModal] = useState<'brochure' | 'layout' | null>(null);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
@@ -491,22 +486,25 @@ function ShareButton({ title }: { title: string }) {
     e.stopPropagation();
     const url = window.location.href;
 
-    // Copy to clipboard
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied('ok');
-      setTimeout(() => setCopied('idle'), 2500);
-    } catch {
-      setCopied('fail');
-      setTimeout(() => setCopied('idle'), 2500);
-    }
-
-    // Trigger native share menu if supported
+    // navigator.share must be called first and un-awaited: on iOS the user
+    // activation expires during the clipboard await and the sheet never opens.
     if (navigator.share) {
       try {
         await navigator.share({ title, url });
-      } catch {}
+        return;
+      } catch (err) {
+        // User dismissed the sheet — don't fall through to the copy fallback.
+        if ((err as Error)?.name === 'AbortError') return;
+      }
     }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied('ok');
+    } catch {
+      setCopied('fail');
+    }
+    setTimeout(() => setCopied('idle'), 2500);
   };
 
   return (

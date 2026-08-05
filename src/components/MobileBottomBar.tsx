@@ -14,7 +14,12 @@ export default function MobileBottomBar({ projectTitle, waUrl }: Props) {
   return (
     <>
       <div className="mobile-bar">
-        <div style={{ display: 'flex', gap: 10, padding: '10px 16px', alignItems: 'center' }}>
+        <div style={{
+          display: 'flex', gap: 10, alignItems: 'center',
+          padding: '10px 16px',
+          // Keeps the buttons clear of the iPhone home indicator.
+          paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
+        }}>
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
