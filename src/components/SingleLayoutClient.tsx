@@ -305,13 +305,18 @@ export default function SingleLayoutClient({
               </span>
             </div>
 
-            <h1 style={{
-              margin: '0 0 12px', fontFamily: 'Archivo, sans-serif',
-              fontWeight: 800, fontSize: 'clamp(28px, 5vw, 44px)',
-              letterSpacing: '-0.02em', color: 'var(--ink)', lineHeight: 1.1,
-            }}>
-              {layout.projectTitle} <span style={{ color: 'var(--gold)' }}>Layout Plan</span>
-            </h1>
+            {(() => {
+              const cleanTitle = layout.projectTitle.replace(/\s+(layout\s+plan|layout)$/i, '');
+              return (
+                <h1 style={{
+                  margin: '0 0 12px', fontFamily: 'Archivo, sans-serif',
+                  fontWeight: 800, fontSize: 'clamp(28px, 5vw, 44px)',
+                  letterSpacing: '-0.02em', color: 'var(--ink)', lineHeight: 1.1,
+                }}>
+                  {cleanTitle} <span style={{ color: 'var(--gold)' }}>Layout Plan</span>
+                </h1>
+              );
+            })()}
 
             {layout.description && (
               <p style={{ margin: '0 0 20px', fontSize: 15, color: 'var(--muted)', lineHeight: 1.6, maxWidth: '64ch' }}>

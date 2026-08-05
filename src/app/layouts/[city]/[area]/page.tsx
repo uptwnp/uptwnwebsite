@@ -24,7 +24,8 @@ export async function generateMetadata({
   const single = await getSingleLayoutDB(city, area);
   if (single) {
     const cityLabel = formatCityLabel(city);
-    const title = `${single.projectTitle} Layout Plan · ${cityLabel}`;
+    const cleanTitle = single.projectTitle.replace(/\s+(layout\s+plan|layout)$/i, '');
+    const title = `${cleanTitle} Layout Plan · ${cityLabel}`;
     const description = `Download and view layout plan for ${single.projectTitle} in ${single.location}. ${single.description ?? ''}`;
     return {
       title,
@@ -93,11 +94,12 @@ export default async function AreaOrSingleLayoutPage({
     const allLayouts = await getLayouts();
     const otherLayouts = allLayouts.filter(l => l.id !== single.id);
 
+    const cleanProjectTitle = single.projectTitle.replace(/\s+(layout\s+plan|layout)$/i, '');
     const jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: `${single.projectTitle} Layout Plan`,
-      description: single.description ?? `Layout plan for ${single.projectTitle} in ${single.location}`,
+      name: `${cleanProjectTitle} Layout Plan`,
+      description: single.description ?? `Layout plan for ${cleanProjectTitle} in ${single.location}`,
       image: single.imageUrl,
       url: `https://uptownproperty.in/layouts/${city}/${single.slug}`,
     };
