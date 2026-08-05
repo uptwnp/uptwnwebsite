@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Project } from '@/data/projects';
-import type { LayoutItem } from '@/data/layouts';
+import { PROJECTS, type Project } from '@/data/projects';
+import { LAYOUTS, getAllLayoutParams, getLayoutsByArea as getLayoutsByAreaStatic, type LayoutItem } from '@/data/layouts';
 
 // ── DB row type (snake_case columns from Supabase) ──────────────────────────
 interface ProjectRow {
@@ -33,11 +33,11 @@ interface ProjectRow {
   sort_order: number | null;
 }
 
-// ── Supabase client (server-side only — never shipped to the browser) ────────
+// ── Supabase client (server-side only — returns null if env vars missing) ────
 function getSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SECRET_KEY;
-  if (!url || !key) throw new Error('Supabase env vars missing');
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
   return createClient(url, key);
 }
 
@@ -72,47 +72,64 @@ function rowToProject(row: ProjectRow): Project {
   };
 }
 
-// ── Public helpers ───────────────────────────────────────────────────────────
+// ── Public helpers with Static Data Fallbacks for Safe Builds ─────────────────
 
 /** Fetch all projects ordered by sort_order, then id */
 export async function getProjects(): Promise<Project[]> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('projects')
-    .select('*')
-    .order('sort_order', { ascending: true })
-    .order('id', { ascending: true });
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) return PROJECTS;
 
-  if (error) throw new Error(`getProjects: ${error.message}`);
-  return (data as ProjectRow[]).map(rowToProject);
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('id', { ascending: true });
+
+    if (error || !data) return PROJECTS;
+    return (data as ProjectRow[]).map(rowToProject);
+  } catch {
+    return PROJECTS;
+  }
 }
 
 /** Fetch a single project by slug */
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('projects')
-    .select('*')
-    .eq('slug', slug)
-    .single();
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) return PROJECTS.find(p => p.slug === slug) ?? null;
 
-  if (error) {
-    if (error.code === 'PGRST116') return null; // no rows found
-    throw new Error(`getProjectBySlug: ${error.message}`);
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error || !data) {
+      return PROJECTS.find(p => p.slug === slug) ?? null;
+    }
+    return rowToProject(data as ProjectRow);
+  } catch {
+    return PROJECTS.find(p => p.slug === slug) ?? null;
   }
-  return rowToProject(data as ProjectRow);
 }
 
 /** Fetch only slugs — lightweight, used for generateStaticParams & sitemap */
 export async function getProjectSlugs(): Promise<string[]> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('projects')
-    .select('slug')
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) return PROJECTS.map(p => p.slug);
 
-  if (error) throw new Error(`getProjectSlugs: ${error.message}`);
-  return (data as { slug: string }[]).map(r => r.slug);
+    const { data, error } = await supabase
+      .from('projects')
+      .select('slug')
+      .order('sort_order', { ascending: true });
+
+    if (error || !data || data.length === 0) return PROJECTS.map(p => p.slug);
+    return (data as { slug: string }[]).map(r => r.slug);
+  } catch {
+    return PROJECTS.map(p => p.slug);
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -154,48 +171,66 @@ function layoutRowToItem(row: LayoutRow): LayoutItem {
 
 /** Fetch all layouts ordered by sort_order */
 export async function getLayouts(): Promise<LayoutItem[]> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('layouts')
-    .select('*')
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) return LAYOUTS;
 
-  if (error) throw new Error(`getLayouts: ${error.message}`);
-  return (data as LayoutRow[]).map(layoutRowToItem);
+    const { data, error } = await supabase
+      .from('layouts')
+      .select('*')
+      .order('sort_order', { ascending: true });
+
+    if (error || !data || data.length === 0) return LAYOUTS;
+    return (data as LayoutRow[]).map(layoutRowToItem);
+  } catch {
+    return LAYOUTS;
+  }
 }
 
 /** Fetch layouts filtered by city + area */
 export async function getLayoutsByAreaDB(city: string, area: string): Promise<LayoutItem[]> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('layouts')
-    .select('*')
-    .eq('city_slug', city)
-    .eq('area_slug', area)
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) return getLayoutsByAreaStatic(city, area);
 
-  if (error) throw new Error(`getLayoutsByAreaDB: ${error.message}`);
-  return (data as LayoutRow[]).map(layoutRowToItem);
+    const { data, error } = await supabase
+      .from('layouts')
+      .select('*')
+      .eq('city_slug', city)
+      .eq('area_slug', area)
+      .order('sort_order', { ascending: true });
+
+    if (error || !data || data.length === 0) return getLayoutsByAreaStatic(city, area);
+    return (data as LayoutRow[]).map(layoutRowToItem);
+  } catch {
+    return getLayoutsByAreaStatic(city, area);
+  }
 }
 
 /** Get all unique city+area combos for generateStaticParams */
 export async function getLayoutAreaParams(): Promise<{ city: string; area: string }[]> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from('layouts')
-    .select('city_slug, area_slug')
-    .order('sort_order', { ascending: true });
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) return getAllLayoutParams();
 
-  if (error) throw new Error(`getLayoutAreaParams: ${error.message}`);
+    const { data, error } = await supabase
+      .from('layouts')
+      .select('city_slug, area_slug')
+      .order('sort_order', { ascending: true });
 
-  const seen = new Set<string>();
-  const params: { city: string; area: string }[] = [];
-  for (const row of data as { city_slug: string; area_slug: string }[]) {
-    const key = `${row.city_slug}/${row.area_slug}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      params.push({ city: row.city_slug, area: row.area_slug });
+    if (error || !data || data.length === 0) return getAllLayoutParams();
+
+    const seen = new Set<string>();
+    const params: { city: string; area: string }[] = [];
+    for (const row of data as { city_slug: string; area_slug: string }[]) {
+      const key = `${row.city_slug}/${row.area_slug}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        params.push({ city: row.city_slug, area: row.area_slug });
+      }
     }
+    return params;
+  } catch {
+    return getAllLayoutParams();
   }
-  return params;
 }
