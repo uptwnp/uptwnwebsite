@@ -183,10 +183,10 @@ export default function ContactPage() {
                 Uptown Property Office
               </h2>
               <p style={{ margin: 0, fontSize: 15, color: 'var(--text)', lineHeight: 1.6 }}>
-                123 Main Street, Panipat, Haryana 132103
+                Shop No. 2, 1st Floor, Dharm Singh Market, Opposite Malik CNG Petrol Pump, Nearby Babail Naka, Panipat, Haryana 132103
               </p>
               <p style={{ margin: '8px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.5 }}>
-                🕒 <strong>Working Hours:</strong> Mon – Sat, 9:00 AM – 6:00 PM (Sunday Closed)
+                🕒 <strong>Working Hours:</strong> Mon – Sat, 9:00 AM – 8:00 PM (Sunday By Appointment)
               </p>
             </div>
 
@@ -195,7 +195,7 @@ export default function ContactPage() {
               paddingTop: 16, borderTop: '1px solid var(--divider)',
             }}>
               <a
-                href="https://maps.google.com/?q=Panipat+Haryana"
+                href="https://maps.google.com/?q=Shop+No.+2+First+Floor+Dharm+Singh+Market+Opposite+Malik+CNG+Petrol+Pump+Panipat+Haryana+132103"
                 target="_blank"
                 rel="noopener"
                 style={{

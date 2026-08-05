@@ -15,9 +15,9 @@ const STATS = [
 ];
 
 const SOCIAL = [
-  { name: 'Instagram', sub: 'Reels & site walkthroughs', href: '#' },
-  { name: 'YouTube', sub: 'Full project tours', href: '#' },
-  { name: 'Facebook', sub: 'Listings & updates', href: '#' },
+  { name: 'Instagram', sub: 'Reels & site walkthroughs', href: 'https://www.instagram.com/panipat_uptown_property' },
+  { name: 'YouTube', sub: 'Full project tours', href: 'https://www.youtube.com/@UptownProperties' },
+  { name: 'Facebook', sub: 'Listings & updates', href: 'https://uptownproperties.in/links' },
   { name: 'WhatsApp', sub: 'Daily new inventory', href: 'https://wa.me/919518091945' },
 ];
 
@@ -246,9 +246,9 @@ export default function HomeClient({ projects = [] }: { projects?: Project[] }) 
             {/* Office */}
             <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 22, display: 'flex', flexDirection: 'column', gap: 6 }}>
               <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--faint)' }}>Office</span>
-              <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>123 Main Street, Panipat, Haryana 132103</span>
-              <span style={{ fontSize: 13, color: 'var(--muted)' }}>Mon–Sat, 9:00 AM – 6:00 PM · Sunday closed</span>
-              <a href="https://maps.google.com/?q=Panipat+Haryana" target="_blank" rel="noopener"
+              <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>Shop No. 2, 1st Floor, Dharm Singh Market, Opp. Malik CNG Pump, Babail Naka, Panipat, HR 132103</span>
+              <span style={{ fontSize: 13, color: 'var(--muted)' }}>Mon–Sat, 9:00 AM – 8:00 PM · Sunday by appointment</span>
+              <a href="https://maps.google.com/?q=Shop+No.+2+First+Floor+Dharm+Singh+Market+Opposite+Malik+CNG+Petrol+Pump+Panipat+Haryana+132103" target="_blank" rel="noopener"
                 style={{ fontSize: 13, fontWeight: 600, color: 'var(--acc)', marginTop: 4 }}>Open in Maps ↗</a>
             </div>
             {/* Phone */}

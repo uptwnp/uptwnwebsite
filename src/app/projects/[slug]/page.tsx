@@ -394,7 +394,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <h2 style={{ margin: '0 0 18px', fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 22, letterSpacing: '-0.01em' }}>
             Other projects
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div className="related-projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
             {related.map(r => {
               const { main, onwards } = formatPrice(r.price);
               return (
@@ -438,12 +438,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             background: var(--hdr); backdrop-filter: blur(12px);
             border-top: 1px solid var(--border);
           }
+          .related-projects-grid {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+          }
         }
         @media (min-width: 821px) {
           .mobile-bar { display: none; }
         }
         @media (max-width: 1100px) and (min-width: 821px) {
-          section.container > div[style*="grid-template-columns: repeat(3"] {
+          .related-projects-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }

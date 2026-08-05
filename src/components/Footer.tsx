@@ -39,11 +39,12 @@ export default function Footer({ mobilePad = false }: { mobilePad?: boolean }) {
 
           <nav style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 18px', fontSize: 13 }}>
             <Link href="/projects" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Projects</Link>
+            <Link href="/layouts" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Layouts</Link>
             <Link href="/contact" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Contact</Link>
             <Link href="/fees" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Brokerage &amp; Fees</Link>
             <Link href="/privacy" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Privacy Policy</Link>
             <Link href="/terms" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Terms &amp; Conditions</Link>
-            <Link href="/links" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Quick Links</Link>
+            <a href="https://uptownproperties.in/links" target="_blank" rel="noopener" style={{ color: 'var(--muted)', transition: 'color 0.15s' }}>Quick Links ↗</a>
             <Link href="https://mylistings.in/" target="_blank" rel="noopener" style={{ color: 'var(--muted)' }}>Resale</Link>
             <Link href="https://mylistings.in/sell" target="_blank" rel="noopener" style={{ color: 'var(--muted)' }}>Sell</Link>
           </nav>

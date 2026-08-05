@@ -257,7 +257,7 @@ export default function PhotoGallery({ project }: Props) {
           transition: all 0.15s ease;
           flex: 1 1 0px;
           min-width: 0;
-          box-sizing: border-border;
+          box-sizing: border-box;
         }
 
         .gallery-action-btn:hover, .gallery-share-btn:hover {
