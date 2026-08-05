@@ -22,6 +22,17 @@ export default function Footer({ mobilePad = false }: { mobilePad?: boolean }) {
           color: 'var(--muted)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--ink)', fontWeight: 700 }}>
+            <svg
+              width="14"
+              height="20"
+              viewBox="0 0 549 796"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ height: 20, width: 'auto', flexShrink: 0 }}
+            >
+              <path d="M365.484 795.462V451.479L548.225 580.472V795.462H453.307H365.484Z" fill="#FFAD35" />
+              <path d="M0 279.486L354.733 0V440.728L182.741 580.472V795.461H0V279.486Z" fill="var(--ink)" />
+            </svg>
             <span>UPTOWN PROPERTY</span>
             <span style={{ color: 'var(--faint)', fontWeight: 400 }}>· Panipat &amp; NCR</span>
           </div>
