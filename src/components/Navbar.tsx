@@ -39,7 +39,7 @@ export default function Navbar() {
             <path d="M0 279.486L354.733 0V440.728L182.741 580.472V795.461H0V279.486Z" fill="var(--ink)" />
           </svg>
           <span className="logo-text" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 18, fontWeight: 800, letterSpacing: '-0.01em', whiteSpace: 'nowrap', lineHeight: 1, paddingBottom: 1 }}>
-            UPTOWN<span style={{ color: 'var(--acc)' }}> PROPERTY</span>
+            UPTOWN<span style={{ color: 'var(--gold)' }}> PROPERTY</span>
           </span>
         </Link>
 

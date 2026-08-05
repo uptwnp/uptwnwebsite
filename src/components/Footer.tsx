@@ -33,7 +33,7 @@ export default function Footer({ mobilePad = false }: { mobilePad?: boolean }) {
               <path d="M365.484 795.462V451.479L548.225 580.472V795.462H453.307H365.484Z" fill="#FFAD35" />
               <path d="M0 279.486L354.733 0V440.728L182.741 580.472V795.461H0V279.486Z" fill="var(--ink)" />
             </svg>
-            <span style={{ lineHeight: 1, paddingBottom: 1 }}>UPTOWN PROPERTY</span>
+            <span style={{ lineHeight: 1, paddingBottom: 1 }}>UPTOWN<span style={{ color: 'var(--gold)' }}> PROPERTY</span></span>
             <span style={{ color: 'var(--faint)', fontWeight: 400, paddingBottom: 1 }}>· Panipat &amp; NCR</span>
           </div>
 
