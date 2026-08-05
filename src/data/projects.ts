@@ -282,7 +282,7 @@ export const PROJECTS: Project[] = [
     segment: 'Residential',
     form: 'Plots',
     type: 'Plots',
-    status: 'Pre-Launch · Limited Inventory',
+    status: 'Pre-Booking Open',
     price: '₹50,000 / sq yd',
     area: '143–180 sq yd',
     units: 'Limited Inventory',
