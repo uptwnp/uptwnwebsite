@@ -364,7 +364,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <h2 style={{ margin: '0 0 18px', fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 22, letterSpacing: '-0.01em' }}>
             Other projects
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div className="related-projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, width: '100%' }}>
             {related.map(r => {
               const { main, onwards } = formatPrice(r.price);
               return (
@@ -374,15 +374,16 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     background: 'var(--card)', border: '1px solid var(--border)',
                     borderRadius: 16, padding: 18, textDecoration: 'none',
                     color: 'var(--ink)', display: 'flex', flexDirection: 'column', gap: 8,
+                    minWidth: 0, boxSizing: 'border-box', overflow: 'hidden',
                   }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--acc)' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--acc)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {r.segment} · {r.form}
                   </span>
-                  <span style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 600, fontSize: 17, lineHeight: 1.25 }}>{r.title}</span>
-                  <span style={{ fontSize: 13, color: 'var(--muted)' }}>{r.location}</span>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginTop: 6, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
-                    <span style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 15 }}>{main}</span>
-                    {onwards && <span style={{ fontSize: 12, color: 'var(--muted)' }}>{onwards}</span>}
+                  <span style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 600, fontSize: 17, lineHeight: 1.25, wordBreak: 'break-word' }}>{r.title}</span>
+                  <span style={{ fontSize: 13, color: 'var(--muted)', wordBreak: 'break-word' }}>{r.location}</span>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, marginTop: 6, paddingTop: 10, borderTop: '1px solid var(--border)', minWidth: 0 }}>
+                    <span style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 15, flexShrink: 0 }}>{main}</span>
+                    {onwards && <span style={{ fontSize: 12, color: 'var(--muted)', flexShrink: 0 }}>{onwards}</span>}
                   </div>
                 </Link>
               );
@@ -397,11 +398,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       </main>
 
       <style>{`
-        @media (max-width: 820px) {
-          .container > div[style*="grid-template-columns"] {
+        @media (max-width: 768px) {
+          .related-projects-grid {
             grid-template-columns: 1fr !important;
           }
-          div[style*="320px"] { display: none; }
           .mobile-bar {
             display: block;
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
@@ -409,11 +409,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             border-top: 1px solid var(--border);
           }
         }
-        @media (min-width: 821px) {
+        @media (min-width: 769px) {
           .mobile-bar { display: none; }
         }
-        @media (max-width: 1100px) and (min-width: 821px) {
-          section.container > div[style*="grid-template-columns: repeat(3"] {
+        @media (max-width: 1024px) and (min-width: 769px) {
+          .related-projects-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }

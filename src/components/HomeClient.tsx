@@ -114,10 +114,11 @@ export default function HomeClient() {
           </div>
 
           {/* 3-column grid */}
-          <div style={{
+          <div className="grid-projects" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 14,
+            width: '100%',
           }}>
             {shown.map(project => (
               <ProjectCard key={project.slug} project={project} />
@@ -125,11 +126,11 @@ export default function HomeClient() {
           </div>
 
           <style>{`
-            @media (max-width: 820px) {
-              #projects .grid-projects { grid-template-columns: 1fr !important; }
+            @media (max-width: 768px) {
+              .grid-projects { grid-template-columns: 1fr !important; gap: 12px !important; }
             }
-            @media (max-width: 1100px) and (min-width: 821px) {
-              section#projects > div:last-child { grid-template-columns: repeat(2, 1fr) !important; }
+            @media (max-width: 1024px) and (min-width: 769px) {
+              .grid-projects { grid-template-columns: repeat(2, 1fr) !important; }
             }
           `}</style>
         </section>
