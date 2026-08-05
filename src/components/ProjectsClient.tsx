@@ -67,7 +67,7 @@ export default function ProjectsClient() {
           </p>
 
           {/* Search & Filter Controls */}
-          <div className="search-filter-box" style={{
+          <div style={{
             background: 'var(--card)',
             border: '1px solid var(--border)',
             borderRadius: 20,
@@ -77,8 +77,6 @@ export default function ProjectsClient() {
             gap: 16,
             boxShadow: '0 4px 20px var(--shadow)',
             marginBottom: 32,
-            width: '100%',
-            boxSizing: 'border-box',
           }}>
             {/* Search Bar */}
             <div style={{ position: 'relative', width: '100%' }}>
@@ -100,7 +98,6 @@ export default function ProjectsClient() {
                   color: 'var(--ink)',
                   fontSize: 14,
                   outline: 'none',
-                  boxSizing: 'border-box',
                   transition: 'border-color 0.15s',
                 }}
                 onFocus={e => e.currentTarget.style.borderColor = 'var(--gold)'}
@@ -129,10 +126,8 @@ export default function ProjectsClient() {
               gap: 12,
               paddingTop: 12,
               borderTop: '1px solid var(--divider)',
-              width: '100%',
-              minWidth: 0,
             }}>
-              <div className="scrollbar-none" style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, maxWidth: '100%' }}>
+              <div className="scrollbar-none" style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
                 {TYPE_TABS.map(tab => {
                   const active = tab === selectedType;
                   return (
@@ -181,8 +176,6 @@ export default function ProjectsClient() {
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
               gap: 16,
-              width: '100%',
-              boxSizing: 'border-box',
             }} className="projects-listing-grid">
               {filteredProjects.map(project => (
                 <ProjectCard key={project.slug} project={project} />
@@ -197,8 +190,6 @@ export default function ProjectsClient() {
               border: '1px dashed var(--outline)',
               borderRadius: 24,
               margin: '20px 0',
-              width: '100%',
-              boxSizing: 'border-box',
             }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
               <h3 style={{ fontFamily: 'Archivo, sans-serif', fontSize: 20, margin: '0 0 8px', color: 'var(--ink)' }}>
@@ -224,29 +215,16 @@ export default function ProjectsClient() {
       </main>
 
       <style>{`
-        .projects-listing-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-          width: 100%;
-        }
-
-        @media (max-width: 768px) {
-          .search-filter-box {
-            padding: 16px 14px !important;
-            border-radius: 16px !important;
-            margin-bottom: 20px !important;
-          }
+        @media (max-width: 820px) {
           .projects-listing-grid {
             grid-template-columns: 1fr !important;
-            gap: 12px !important;
           }
         }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media (min-width: 821px) and (max-width: 1100px) {
           .projects-listing-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
+        }
       `}</style>
 
       <Footer />
