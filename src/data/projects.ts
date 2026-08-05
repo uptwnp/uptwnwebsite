@@ -289,9 +289,9 @@ export const PROJECTS: Project[] = [
     possession: '9 Months EMI Plan',
     total: 'Residential Township',
     bookingAmount: '₹11 Lakhs',
-    description: 'Premium residential plotted township by MPM (Manveet Property Management) on main GT Road / NH 44, Panipat with 143 to 180 sq yd plots.',
+    description: 'Premium residential plotted township on main GT Road / NH 44, Panipat with 143 to 180 sq yd plots.',
     details: [
-      'NYSA Residential Township by Manveet Property Management (MPM) offers 143 to 180 sq. yd. residential plots at a pre-launch price of ₹50,000 per sq. yd. on main GT Road / NH 44, Panipat.',
+      'NYSA Residential Township offers 143 to 180 sq. yd. residential plots at a pre-launch price of ₹50,000 per sq. yd. on main GT Road / NH 44, Panipat.',
       'Payment Plan: ₹11 Lakh booking amount, approx. 50% payment clear after RERA approval in 30 days, followed by 9 monthly EMIs after allotment.',
     ],
     features: [
@@ -301,7 +301,6 @@ export const PROJECTS: Project[] = [
       '₹11 Lakh booking amount',
       'Approx. 50% clear after RERA approval (30 Days)',
       '9-Month monthly EMI after allotment',
-      'Manveet Property Management (MPM)',
     ],
     amenities: ['Gated township', 'Internal roads', '24x7 security', 'Landscaped entry', 'Boundary wall'],
     nearby: ['GT Road / NH 44', 'Panipat City Access'],
@@ -312,7 +311,6 @@ export const PROJECTS: Project[] = [
       'Booking amount': '₹11 Lakhs',
       'After RERA Approval': 'Approx. 50% Clear in 30 Days',
       'After Allotment EMI': '9 Months Every Month',
-      'Developer / Partner': 'Manveet Property Management (MPM)',
       'Coordinates': '29.518339, 76.978022',
     },
     mapUrl: 'https://maps.google.com/?q=29.518339,76.978022',
