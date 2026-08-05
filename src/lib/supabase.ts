@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import type { Project } from '@/data/projects';
 import type { LayoutItem } from '@/data/layouts';
@@ -75,7 +76,7 @@ function rowToProject(row: ProjectRow): Project {
 // ── Public helpers (Pure Supabase DB fetch) ──────────────────────────────────
 
 /** Fetch all projects ordered by sort_order, then id */
-export async function getProjects(): Promise<Project[]> {
+export const getProjects = cache(async (): Promise<Project[]> => {
   try {
     const supabase = getSupabaseClient();
     if (!supabase) return [];
@@ -91,10 +92,10 @@ export async function getProjects(): Promise<Project[]> {
   } catch {
     return [];
   }
-}
+});
 
 /** Fetch a single project by slug */
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
+export const getProjectBySlug = cache(async (slug: string): Promise<Project | null> => {
   try {
     const supabase = getSupabaseClient();
     if (!supabase) return null;
@@ -112,10 +113,10 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   } catch {
     return null;
   }
-}
+});
 
 /** Fetch only slugs — lightweight, used for generateStaticParams & sitemap */
-export async function getProjectSlugs(): Promise<string[]> {
+export const getProjectSlugs = cache(async (): Promise<string[]> => {
   try {
     const supabase = getSupabaseClient();
     if (!supabase) return [];
@@ -130,7 +131,7 @@ export async function getProjectSlugs(): Promise<string[]> {
   } catch {
     return [];
   }
-}
+});
 
 // ════════════════════════════════════════════════════════════════════════════
 // LAYOUTS
@@ -176,7 +177,7 @@ function layoutRowToItem(row: LayoutRow): LayoutItem {
 }
 
 /** Fetch all layouts ordered by sort_order */
-export async function getLayouts(): Promise<LayoutItem[]> {
+export const getLayouts = cache(async (): Promise<LayoutItem[]> => {
   try {
     const supabase = getSupabaseClient();
     if (!supabase) return [];
@@ -191,7 +192,7 @@ export async function getLayouts(): Promise<LayoutItem[]> {
   } catch {
     return [];
   }
-}
+});
 
 /** Fetch single layout by city + slug */
 export async function getSingleLayoutDB(city: string, slug: string): Promise<LayoutItem | null> {
