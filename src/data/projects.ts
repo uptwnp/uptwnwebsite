@@ -322,13 +322,10 @@ export const PROJECTS: Project[] = [
     amenities: ['Gated township', 'Internal roads', '24x7 security', 'Landscaped entry', 'Boundary wall'],
     nearby: ['GT Road / NH 44', 'Panipat City Access'],
     specifications: {
+      'Project Type': 'Plotted Residential Township',
       'Location': 'GT Road | NH 44, Panipat',
       'Plot sizes': '143–180 sq yd',
-      'Pre-launch price': '₹50,000 / sq yd',
-      'Booking amount': '₹11 Lakhs',
-      'After RERA Approval': 'Approx. 50% Clear in 30 Days',
-      'After Allotment EMI': '9 Months Every Month',
-      'Coordinates': '29.518339, 76.978022',
+      'Rate': '₹50,000 / sq yd',
     },
     mapUrl: 'https://maps.google.com/?q=29.518339,76.978022',
     brochureUrl: 'https://pub-9e00030e294c40efa96642db5ba7f437.r2.dev/projects-files/nysa-payment-plan.jpg',
@@ -442,7 +439,6 @@ export const PROJECTS: Project[] = [
     specifications: {
       'Plot range': '300–3000 sq yd',
       'Rate': 'From ₹27,000 / sq yd',
-      'Booking amount': '₹5 Lakhs',
       'RERA': 'HRERA-PKL-PKL-503-2023',
     },
     rera: 'HRERA-PKL-PKL-503-2023',
