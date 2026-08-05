@@ -37,6 +37,11 @@ const nextConfig: NextConfig = {
         destination: '/projects/:slug',
         permanent: true,
       },
+      {
+        source: '/projects/trident-plots-panipat',
+        destination: '/projects/trident-parktown',
+        permanent: true,
+      },
     ];
   },
 };
