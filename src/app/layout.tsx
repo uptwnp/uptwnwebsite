@@ -108,8 +108,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `
               (function() {
                 try {
-                  var t = localStorage.getItem('uptown-theme');
-                  if (t === 'dark') {
+                  var saved = localStorage.getItem('uptown-theme');
+                  var isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  if (isDark) {
                     document.documentElement.setAttribute('data-theme', 'dark');
                   }
                 } catch(e) {}
