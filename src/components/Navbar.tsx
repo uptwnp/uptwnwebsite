@@ -28,17 +28,17 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--ink)', flex: 1, minWidth: 0 }}>
           <svg
-            width="17"
-            height="24"
+            width="15"
+            height="22"
             viewBox="0 0 549 796"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            style={{ height: 24, width: 'auto', flexShrink: 0 }}
+            style={{ height: 22, width: 'auto', flexShrink: 0, display: 'block' }}
           >
             <path d="M365.484 795.462V451.479L548.225 580.472V795.462H453.307H365.484Z" fill="#FFAD35" />
             <path d="M0 279.486L354.733 0V440.728L182.741 580.472V795.461H0V279.486Z" fill="var(--ink)" />
           </svg>
-          <span className="logo-text" style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 700, letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
+          <span className="logo-text" style={{ fontFamily: 'Archivo, sans-serif', fontSize: 17, fontWeight: 700, letterSpacing: '-0.01em', whiteSpace: 'nowrap', lineHeight: 1, display: 'inline-flex', alignItems: 'center' }}>
             UPTOWN<span style={{ color: 'var(--acc)' }}> PROPERTY</span>
           </span>
         </Link>
